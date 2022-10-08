@@ -1,13 +1,14 @@
+/* eslint-disable no-undef */
 const express = require("express");
 const { default: mongoose } = require("mongoose");
 const app = express();
 // const User = require("./models/users");
 const userRoutes = require("./routes/users");
+console.log(process.env.MONGO_CONNECT);
+
 app.use(express.json());
 mongoose
-    .connect(
-        "mongodb+srv://Jarax:JRkyMCM2UK8kGwEP@cluster0.lctcm7v.mongodb.net/?retryWrites=true&w=majority"
-    )
+    .connect(`${process.env.MONGO_CONNECT}`)
     .then(() => console.log("Connexion à MongoDB réussie !"))
     .catch(() => console.log("Connexion à MongoDB échouée !"));
 
