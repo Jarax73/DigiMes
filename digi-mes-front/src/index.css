@@ -26,15 +26,39 @@ code {
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     align-items: center;
     border-radius: 15px;
-    padding: 10px;
+    padding: 10px 0;
+    
+}
+.message{
+    display: flex;
+    align-items: center;
+    background-color: #004BE1;
+    width: 100%;
+    height: 20%;
+    align-self: center;
+    border-radius: 15px 0 0 15px;
+}
+.path-user{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    margin-top: 50%;
+    width: 100px;
+    align-self: flex-end;
 }
 .image-user{
-    border: 1px solid #000;
     border-radius: 50%;
     width: 70px;
     height: 70px;
+}
+.user-avatar{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
 }
 .users{
     flex: 2;
@@ -43,13 +67,24 @@ code {
     flex-direction: column;
     gap: 15px;
 }
+.search{
+    flex: 5;
+}
 .search-user{
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
     background-color: #fff;
     border-radius: 15px;
     height: 7%;
+    border: none;
 }
 .search-user input{
     height: 100%;
+    border: none;
+}
+.search-user input:focus{
+    outline: none;
 }
 .users-discuss{
     background-color: #fff;
@@ -64,7 +99,6 @@ code {
 
 }
 .conversation-img{
-    border: 1px solid #000;
     border-radius: 50%;
     width: 70px;
     height: 60px;
@@ -78,8 +112,46 @@ code {
 .info-conversation h3{
     margin-bottom: -10px;
 }
-
+.to-discuss{
+    flex: 1;
+    overflow: scroll;
+    width: 90%;
+    margin: auto;
+}
+.send-message{
+    padding: 0 0 5% 0;
+}
+.writing-container{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 90%;
+    margin: auto;
+}
+.writing{
+    width: 85%;
+    height: 50px;
+    border-radius: 15px;
+    border: none;
+    background-color: #EAEAEA;
+    padding: 0 2%;
+}
+.writing:focus{
+    outline: none;
+}
+.send-button{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 50px;
+    height: 50px;
+    background-color: #1966FF;
+    border-radius: 15px;
+}
 .discuss{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
     background-color: #fff;
     flex: 3;
     border-radius: 15px;
