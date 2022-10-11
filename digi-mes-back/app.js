@@ -1,12 +1,15 @@
 /* eslint-disable no-undef */
 const express = require("express");
-const { default: mongoose } = require("mongoose");
+const mongoose = require("mongoose");
 const app = express();
+const dotenv = require("dotenv");
+dotenv.config();
 // const User = require("./models/users");
 const userRoutes = require("./routes/users");
-console.log(process.env.MONGO_CONNECT);
+const discussionsRoutes = require("./routes/discussion");
 
 app.use(express.json());
+
 mongoose
     .connect(`${process.env.MONGO_CONNECT}`)
     .then(() => console.log("Connexion à MongoDB réussie !"))
@@ -26,5 +29,6 @@ app.use((req, res, next) => {
 });
 
 app.use("/api/auth", userRoutes);
+app.use("/api/discussions", discussionsRoutes);
 
 module.exports = app;
