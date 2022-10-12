@@ -113,10 +113,19 @@ code {
     margin-bottom: -10px;
 }
 .to-discuss{
+    display: flex;
+    flex-direction: column;
     flex: 1;
     overflow-y: scroll;
+    scroll-behavior: smooth;
     width: 90%;
+    height: 100%;
     margin: auto;
+    cursor: pointer;
+}
+.discuss-style{
+    width: auto;
+    max-width: 250px;
 }
 .discuss-border{
     display: inline-block;
@@ -124,6 +133,7 @@ code {
     padding: 0 10px;
     margin: 10px 0;
     border-radius: 15px;
+    z-index: 1;
 }
 .send-message{
     padding: 0 0 5% 0;
@@ -154,6 +164,8 @@ code {
     height: 50px;
     background-color: #1966FF;
     border-radius: 15px;
+    border: none;
+    cursor: pointer;
 }
 .discuss{
     display: flex;

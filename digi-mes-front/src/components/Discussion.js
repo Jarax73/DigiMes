@@ -1,12 +1,19 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { AiOutlineSend } from "react-icons/ai";
 // import { response } from "../../../digi-mes-back/app";
 import { AppContext } from "../App";
+import Discuss from "./Discuss";
+import WriteMessage from "./WriteMessage";
 
 export default function Discussion() {
-  const { Jakaps } = useContext(AppContext);
-  const [discussion, setDiscussion] = useState([]);
+  const { Jakaps, discussion, setDiscussion } = useContext(AppContext);
+
+  const [post, setPost] = useState("");
+  const [id, setId] = useState("");
+
+  const userToPost = {
+    discussion: post,
+  };
 
   useEffect(() => {
     axios
@@ -19,9 +26,28 @@ export default function Discussion() {
       .then((response) => setDiscussion(response.data));
   }, []);
 
-  const sendMessage = () => {};
+  const sendMessage = (e) => {
+    e.preventDefault();
+    axios({
+      method: "POST",
+      url: "http://localhost:5000/api/discussions",
 
-  console.log(discussion);
+      data: userToPost,
+    })
+      .then((response) => response)
+      .catch((error) => error);
+    setPost("");
+  };
+  const deleteMessage = (id) => {
+    axios.delete(`http://localhost:5000/api/discussions/${id}`).then((res) => {
+      res.data;
+    });
+  };
+
+  const handleChange = (e) => {
+    setPost(e.target.value);
+  };
+
   return (
     <section className="discuss">
       <header className="discuss-head">
@@ -34,29 +60,33 @@ export default function Discussion() {
         </div>
       </header>
       <hr style={{ width: "90%" }} />
-      <div className="to-discuss">
-        {!discussion
-          ? []
-          : discussion.map((discuss) => (
-              <div className="discuss-style" key={discuss._id}>
-                <div className="discuss-border">
-                  <p>{discuss.discussion}</p>
-                </div>
-              </div>
-            ))}
-      </div>
+      {discussion.length === 0 ? (
+        <div
+          style={{ justifySelf: "center", alignSelf: "center", height: "100%" }}
+        >
+          Loading...
+        </div>
+      ) : (
+        <div className="to-discuss">
+          {discussion.map((discuss) => (
+            <div className="discuss-style" key={discuss._id}>
+              <Discuss
+                discuss={discuss}
+                id={id}
+                setId={setId}
+                deleteMessage={deleteMessage}
+              />
+            </div>
+          ))}
+        </div>
+      )}
       <div className="send-message">
         <hr style={{ width: "90%", marginBottom: "20px" }} />
-        <form className="writing-container" onClick={sendMessage}>
-          <input
-            className="writing"
-            type="text"
-            placeholder="Write your Message"
-          />
-          <div className="send-button">
-            <AiOutlineSend style={{ fontSize: "150%", color: "#EAEAEA" }} />
-          </div>
-        </form>
+        <WriteMessage
+          handleChange={handleChange}
+          sendMessage={sendMessage}
+          post={post}
+        />
       </div>
     </section>
   );
