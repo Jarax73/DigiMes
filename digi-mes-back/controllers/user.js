@@ -3,8 +3,7 @@ const User = require("../models/users");
 const bcrypt = require("bcrypt");
 
 exports.signup = (request, response) => {
-    console.log(request.body.password);
-    console.log(request.body.email);
+    console.log(request.body);
     bcrypt
         .hash(request.body.password, 10)
         .then((hash) => {
@@ -12,22 +11,28 @@ exports.signup = (request, response) => {
                 firstName: request.body.firstName,
                 lastName: request.body.lastName,
                 email: request.body.email,
-                password: hash
+                password: hash,
                 // imageUrl: request.body.imageUrl,
             });
             user.save()
                 .then(() =>
-                    response.status(201).json({ 
-                        success: true, 
+                    response.status(201).json({
+                        success: true,
                         message: "User created",
                         user: {
                             id: user._id,
-                            firstName: user.firstName
-                        }
-                     })
+                            firstName: user.firstName,
+                        },
+                    })
                 )
                 .catch((error) => response.status(400).json({ error }));
         })
+        .catch((error) => response.status(500).json({ error }));
+};
+
+exports.getUsers = (request, response) => {
+    User.find()
+        .then((users) => response.status(200).json({ users }))
         .catch((error) => response.status(500).json({ error }));
 };
 
