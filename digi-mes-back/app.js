@@ -3,12 +3,16 @@ const express = require("express");
 const mongoose = require("mongoose");
 const app = express();
 const dotenv = require("dotenv");
+const passport = require("passport");
 dotenv.config();
 // const User = require("./models/users");
 const userRoutes = require("./routes/users");
 const discussionsRoutes = require("./routes/discussion");
 
 app.use(express.json());
+app.use(passport.initialize());
+
+require("./controllers/passport");
 
 mongoose
     .connect(`${process.env.MONGO_CONNECT}`)

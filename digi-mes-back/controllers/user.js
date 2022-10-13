@@ -1,9 +1,8 @@
-const jsonWebToken = require("jsonwebtoken");
+const jwt = require("jsonwebtoken");
 const User = require("../models/users");
 const bcrypt = require("bcrypt");
 
 exports.signup = (request, response) => {
-    console.log(request.body);
     bcrypt
         .hash(request.body.password, 10)
         .then((hash) => {
@@ -37,49 +36,32 @@ exports.getUsers = (request, response) => {
 };
 
 exports.login = (request, response) => {
-    User.findOne({ email: request.body.email })
-        .then((user) => {
-            if (!user) {
-                return response.status(401).json({ message: "Invalid mail" });
-            }
-            bcrypt
-                .compare(request.body.password, user.password)
-                .then((valid) => {
-                    if (!valid) {
-                        return response
-                            .status(401)
-                            .json({ message: "Invalid password" });
-                    }
-                    response.status(200).json({
-                        userId: user._id,
-                        token: jsonWebToken.sign(
-                            { userId: user._id },
-                            "RANDOM_TOKEN_SECRET",
-                            { expiresIn: "24h" }
-                        ),
-                    });
-                })
-                .catch((error) => response.status(500).json({ error }));
-        })
-        .catch((error) => response.status(500).json({ error }));
+    User.findOne({ email: request.body.email }).then((user) => {
+        if (!user) {
+            return response.status(401).send({
+                success: false,
+                message: "Cannot find user",
+            });
+        }
+
+        if (bcrypt.compare(request.body.password, user.password)) {
+            return response.status(401).send({
+                success: false,
+                message: "Incorrect password",
+            });
+        }
+
+        const payload = {
+            email: user.email,
+            id: user._id,
+        };
+
+        const token = jwt.sign(payload, "Random string", { expiresIn: "1d" });
+
+        return response.status(200).send({
+            success: true,
+            message: "Logged In successfully",
+            token: `Bearer ${token}`,
+        });
+    });
 };
-
-// exports.getUsers = (request, response) => {
-//     User.find()
-//         .then((user) => response.status(200).json(user))
-//         .catch((error) => response.status(400).json({ error }));
-// };
-
-// exports.getOneUser = (req, res) => {
-//     User.findOne({
-//         _id: req.params.id,
-//     })
-//         .then((user) => {
-//             res.status(200).json(user);
-//         })
-//         .catch((error) => {
-//             res.status(404).json({
-//                 error: error,
-//             });
-//         });
-// };
