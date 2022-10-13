@@ -3,6 +3,8 @@ const User = require("../models/users");
 const bcrypt = require("bcrypt");
 
 exports.signup = (request, response) => {
+    console.log(request.body.password);
+    console.log(request.body.email);
     bcrypt
         .hash(request.body.password, 10)
         .then((hash) => {
@@ -10,12 +12,19 @@ exports.signup = (request, response) => {
                 firstName: request.body.firstName,
                 lastName: request.body.lastName,
                 email: request.body.email,
-                password: hash,
-                imageUrl: request.body.imageUrl,
+                password: hash
+                // imageUrl: request.body.imageUrl,
             });
             user.save()
                 .then(() =>
-                    response.status(201).json({ message: "User created" })
+                    response.status(201).json({ 
+                        success: true, 
+                        message: "User created",
+                        user: {
+                            id: user._id,
+                            firstName: user.firstName
+                        }
+                     })
                 )
                 .catch((error) => response.status(400).json({ error }));
         })
