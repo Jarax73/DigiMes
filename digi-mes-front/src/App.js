@@ -2,7 +2,7 @@ import React, { createContext, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Jakaps from "./assets/jakaps.jpg";
 import Home from "./components/Home";
-import SignIn from "./components/SignIn";
+import SignUp from "./components/SignUp";
 // import Menu from "./components/Menu";
 import Welcome from "./components/Welcome";
 
@@ -16,8 +16,8 @@ function App() {
         {/* <Menu /> */}
         <Routes>
         
-        <Route path="/welcome" element={<Welcome/>} />
-        <Route path="/signin" element={<SignIn/>}/>
+        <Route path="/signin" element={<Welcome/>} />
+        <Route path="/signup" element={<SignUp/>}/>
           <Route exact path="/" element={<Home />} />
           
         </Routes>

@@ -22,7 +22,18 @@ code {
     
 }
 .welcome{
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 15px;
     background-color: #1966FF;
+}
+.introduction{
+    padding: 5%;
+    text-align: center;
+    font-size: 150%;
+    color: #fff;
 }
 .sign{ 
     display: flex;
@@ -33,17 +44,17 @@ code {
     height: 100%;
 }
 .signup-appeal{
-    
+    font-size: 80%;
 }
 .signin{
     display: flex;
     flex-direction: column;
-    background-color: #1966FF;
+    background-color: #fff;
     padding: 50px;
-    border-radius: 15px;
+    border-radius: 0px 15px 15px 0px;
 }
 .signin label{
-    color: #fff;
+    color: #000;
     margin: 5% 0;
 }
 .sign-submit{
@@ -59,6 +70,10 @@ code {
     border-radius: 10px;
     height: 40px;
     padding: 0 5%;
+    background-color: #eaeaea;
+}
+.signin input:focus{
+    outline: none;
 }
 .menu{
     background-color: #1966FF;
