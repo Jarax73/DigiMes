@@ -1,8 +1,9 @@
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 
 export default function SignIn(){
-
+    const [user, setUser] = useState({});
+    console.log(user);
       const createUser = (e) =>{
         e.preventDefault();
         const user = {
@@ -14,10 +15,10 @@ export default function SignIn(){
         
         axios({
             method: "POST",
-            url: "http://localhost:5000/api/auth",      
+            url: "http://localhost:5000/api/auth/register",      
             data: user,
         })
-        .then((response) => response)
+        .then((response) => setUser(response.data))
         .catch((error) => error);
         e.target.reset();
 
