@@ -7,12 +7,11 @@ const passport = require("passport");
 
 router.post("/register", userCtrl.signup);
 router.post("/login", userCtrl.login);
-router.get("/", userCtrl.getUsers);
+router.delete("/:id", userCtrl.deleteUser);
 router.get(
-    "/protected",
+    "/",
     passport.authenticate("jwt", { session: false }),
     userMiddleware
 );
-router.delete("/:id", userCtrl.deleteUser);
 
 module.exports = router;

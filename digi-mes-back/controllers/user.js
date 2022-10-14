@@ -29,31 +29,6 @@ exports.signup = async (request, response) => {
                 error: error,
             });
         });
-
-    // bcrypt
-    //     .hash(request.body.password, 10)
-    //     .then((hash) => {
-    //         const user = new User({
-    //             firstName: request.body.firstName,
-    //             lastName: request.body.lastName,
-    //             email: request.body.email,
-    //             password: hash,
-    //             // imageUrl: request.body.imageUrl,
-    //         });
-    //         user.save()
-    //             .then(() =>
-    //                 response.status(201).json({
-    //                     success: true,
-    //                     message: "User created",
-    //                     user: {
-    //                         id: user._id,
-    //                         firstName: user.firstName,
-    //                     },
-    //                 })
-    //             )
-    //             .catch((error) => response.status(400).json({ error }));
-    //     })
-    //     .catch((error) => response.status(500).json({ error }));
 };
 
 exports.getUsers = (request, response) => {
@@ -63,16 +38,16 @@ exports.getUsers = (request, response) => {
 };
 
 exports.login = (request, response) => {
-    User.findOne({ id: request.body.email }).then(async (user) => {
+    User.findOne({ email: request.body.email }).then(async (user) => {
         if (!user) {
             return response.status(401).send({
                 success: false,
                 message: "Cannot find user",
             });
         }
-        console.log(user);
+        // console.log(user);
 
-        const valid = await bcrypt.compareSync(
+        const valid = await bcrypt.compare(
             user.password,
             request.body.password
         );
@@ -90,9 +65,10 @@ exports.login = (request, response) => {
 
         const token = jwt.sign(payload, "Random string", { expiresIn: "1d" });
 
-        return response.status(200).send({
+        return response.status(200).json({
             success: true,
             message: "Logged In successfully",
+            user,
             token: `Bearer ${token}`,
         });
     });
