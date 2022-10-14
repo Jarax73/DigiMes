@@ -1,27 +1,11 @@
-import axios from "axios";
-import React, { useState } from "react"
-import { Link } from "react-router-dom"
+
+import React, { useContext} from "react";
+import { Link } from "react-router-dom";
+import { AppContext } from "../App";
 
 export default function SignIn(){
-    const [user, setUser] = useState({});
-    console.log(user);
-    const logUser = (e) =>{
-        e.preventDefault();
-        const user = {
-            email: e.target.mail.value,
-            password: e.target.password.value
-        }
-        
-        axios({
-            method: "POST",
-            url: "http://localhost:5000/api/auth/login",      
-            data: user,
-        })
-        .then((response) => setUser(response.data))
-        .catch((error) => error);
-        e.target.reset();
-
-    }
+    
+    const { logUser } = useContext(AppContext);
 
     return <div className='sign'>
 
