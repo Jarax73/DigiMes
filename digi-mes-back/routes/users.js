@@ -5,13 +5,13 @@ const userCtrl = require("../controllers/user");
 const userMiddleware = require("../middleware/passport");
 const passport = require("passport");
 
-router.get("/", userCtrl.getUsers);
 router.post("/register", userCtrl.signup);
+router.post("/login", userCtrl.login);
+router.get("/", userCtrl.getUsers);
 router.get(
     "/protected",
     passport.authenticate("jwt", { session: false }),
     userMiddleware
 );
-router.post("/login", userCtrl.login);
 
 module.exports = router;
