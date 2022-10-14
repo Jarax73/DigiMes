@@ -13,5 +13,6 @@ router.get(
     passport.authenticate("jwt", { session: false }),
     userMiddleware
 );
+router.delete("/:id", userCtrl.deleteUser);
 
 module.exports = router;

@@ -3,12 +3,12 @@ const jwt = require("jsonwebtoken");
 const User = require("../models/users");
 // const bcrypt = require("bcrypt");
 
-exports.signup = (request, response) => {
+exports.signup = async (request, response) => {
     const user = new User({
         firstName: request.body.firstName,
         lastName: request.body.lastName,
         email: request.body.email,
-        password: bcrypt.hash(request.body.password, 10),
+        password: await bcrypt.hashSync(request.body.password, 10),
     });
 
     user.save()
@@ -63,15 +63,20 @@ exports.getUsers = (request, response) => {
 };
 
 exports.login = (request, response) => {
-    User.findOne({ email: request.body.email }).then((user) => {
+    User.findOne({ id: request.body.email }).then(async (user) => {
         if (!user) {
             return response.status(401).send({
                 success: false,
                 message: "Cannot find user",
             });
         }
+        console.log(user);
 
-        if (bcrypt.compare(request.body.password, user.password)) {
+        const valid = await bcrypt.compareSync(
+            user.password,
+            request.body.password
+        );
+        if (valid) {
             return response.status(401).send({
                 success: false,
                 message: "Incorrect password",
@@ -91,4 +96,12 @@ exports.login = (request, response) => {
             token: `Bearer ${token}`,
         });
     });
+};
+
+exports.deleteUser = (request, response) => {
+    User.deleteOne({ _id: request.params.id })
+        .then(() => {
+            response.status(200).json({ message: "User Deleted" });
+        })
+        .catch((error) => response.status(401).json({ error }));
 };
