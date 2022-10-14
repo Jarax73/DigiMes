@@ -1,6 +1,6 @@
 import React from 'react';
-// import SignIn from './SignIn';
-import SignUp from './SignUp';
+import SignIn from './SignIn';
+// import SignUp from './SignUp';
 
 export default function Welcome(){
     return <div className='sign'>
@@ -8,8 +8,8 @@ export default function Welcome(){
     <div className='welcome'>
          <div className="introduction" >Bienvenue dans notre application de messagerie <br/>
         DigiMes</div>
-        {/* <SignIn/> */}
-        <SignUp />
+        <SignIn/>
+        {/* <SignUp /> */}
     </div> 
     </div>
 }
