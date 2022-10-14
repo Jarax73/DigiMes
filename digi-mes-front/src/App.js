@@ -17,6 +17,7 @@ function App() {
   useEffect(() => {
     const storage = window.localStorage.getItem("token");
     setToken(storage);
+    setUser(JSON.parse(window.localStorage.getItem("user")));
   }, []);
 
   const logUser = (e) => {
@@ -31,6 +32,13 @@ function App() {
       url: "http://localhost:5000/api/auth/login",
       data: user,
     })
+      .then((response) => {
+        if (response.data.success === true)
+          window.location.href = "http://localhost:3002/";
+        window.localStorage.setItem("user", JSON.stringify(response.data.user));
+        window.localStorage.setItem("token", response.data.token.split(" ")[1]);
+        console.log(response.data.token.split(" ")[1]);
+      })
       .then((response) => {
         if (response.data.success === true)
           window.location.href = "http://localhost:3002/";

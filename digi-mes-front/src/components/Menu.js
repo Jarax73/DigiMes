@@ -4,11 +4,20 @@ import { TbLogout } from "react-icons/tb";
 import { AppContext } from "../App";
 
 export default function Menu() {
-  const { Jakaps } = useContext(AppContext);
+  const { Jakaps, user } = useContext(AppContext);
   return (
     <nav className="menu">
       <div className="image-user">
         <img className="user-avatar" src={Jakaps} alt="user" />
+        <p style={{ textAlign: "center" }}>
+          {!user ? (
+            <div>loading...</div>
+          ) : (
+            <div>
+              {user.firstName} {user.lastName}{" "}
+            </div>
+          )}
+        </p>
       </div>
       <div className="path-user">
         <div className="message">
