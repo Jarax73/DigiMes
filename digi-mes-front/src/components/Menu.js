@@ -5,12 +5,19 @@ import { AppContext } from "../App";
 
 export default function Menu() {
   const { Jakaps, user } = useContext(AppContext);
-  console.log(user);
   return (
     <nav className="menu">
       <div className="image-user">
         <img className="user-avatar" src={Jakaps} alt="user" />
-        <p style={{textAlign:'center'}} >{user.firstName}{' '}{user.lastName} </p>
+        <p style={{ textAlign: "center" }}>
+          {!user ? (
+            <div>loading...</div>
+          ) : (
+            <div>
+              {user.firstName} {user.lastName}{" "}
+            </div>
+          )}
+        </p>
       </div>
       <div className="path-user">
         <div className="message">
