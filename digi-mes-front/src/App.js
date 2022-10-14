@@ -13,10 +13,11 @@ function App() {
   const [user, setUser] = useState([]);
   const [discussion, setDiscussion] = useState([]);
   const [token, setToken] = useState([]);
- 
- useEffect(()=>{
+
+  useEffect(()=>{
     const storage = window.localStorage.getItem('token');
-    setToken(storage);
+    setToken((storage));
+    setUser(JSON.parse(window.localStorage.getItem('user')));
   }, []);
 
 const logUser = (e) =>{
@@ -32,9 +33,11 @@ const logUser = (e) =>{
         data: user,
     })
     .then((response) => {
+      setUser(response.data);
       if(response.data.success === true) window.location.href = "http://localhost:3002/";
-      setUser(response.data)
+
       window.localStorage.setItem('token', response.data.token.split(' ')[1]);
+      window.localStorage.setItem('user', JSON.stringify(response.data.user));
       console.log(response.data.token.split(' ')[1]);
     })
     .catch((error) => error);
