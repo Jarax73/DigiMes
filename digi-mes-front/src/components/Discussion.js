@@ -6,7 +6,8 @@ import Discuss from "./Discuss";
 import WriteMessage from "./WriteMessage";
 
 export default function Discussion() {
-  const { Jakaps, discussion, setDiscussion } = useContext(AppContext);
+  const { Jakaps, discussion, setDiscussion, messageReceived } =
+    useContext(AppContext);
 
   const [post, setPost] = useState("");
   const [id, setId] = useState("");
@@ -14,6 +15,7 @@ export default function Discussion() {
   const userToPost = {
     discussion: post,
   };
+  console.log(messageReceived);
 
   useEffect(() => {
     axios
@@ -68,16 +70,20 @@ export default function Discussion() {
         </div>
       ) : (
         <div className="to-discuss">
-          {discussion.map((discuss) => (
-            <div className="discuss-style" key={discuss._id}>
-              <Discuss
-                discuss={discuss}
-                id={id}
-                setId={setId}
-                deleteMessage={deleteMessage}
-              />
-            </div>
-          ))}
+          {/* {discussion.map((discuss) => ( */}
+          <div
+            className="discuss-style"
+            // key={discuss._id}
+          >
+            <Discuss
+              // discuss={discuss}
+              id={id}
+              setId={setId}
+              deleteMessage={deleteMessage}
+              messageReceived={messageReceived}
+            />
+          </div>
+          {/* ))} */}
         </div>
       )}
       <div className="send-message">

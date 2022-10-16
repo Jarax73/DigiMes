@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { AiFillDelete } from "react-icons/ai";
 
-export default function Discuss({ discuss, deleteMessage }) {
+export default function Discuss({ discuss, deleteMessage, messageReceived }) {
   Discuss.propTypes = {
     discuss: PropTypes.object,
     deleteMessage: PropTypes.func,
+    messageReceived: PropTypes.string,
   };
   const [isShown, setIsShown] = useState(false);
 
@@ -30,7 +31,7 @@ export default function Discuss({ discuss, deleteMessage }) {
     <>
       {changeAndModify}
       <div className="discuss-border" onClick={handleMessage}>
-        <p>{discuss.discussion}</p>
+        <p>{messageReceived}</p>
       </div>
     </>
   );

@@ -89,6 +89,9 @@ code {
     padding: 10px 0;
     
 }
+.logout{
+    cursor:pointer;
+}
 .message{
     display: flex;
     align-items: center;

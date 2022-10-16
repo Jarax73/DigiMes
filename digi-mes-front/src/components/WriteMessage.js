@@ -1,22 +1,21 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React, { useContext } from "react";
+// import PropTypes from "prop-types";
 import { AiOutlineSend } from "react-icons/ai";
+import { AppContext } from "../App";
 
-export default function WriteMessage({ sendMessage, handleChange, post }) {
-  WriteMessage.propTypes = {
-    sendMessage: PropTypes.func,
-    handleChange: PropTypes.func,
-    post: PropTypes.string,
-  };
+export default function WriteMessage() {
+  const { sendMessage, setMessage, message } = useContext(AppContext);
 
   return (
-    <form className="writing-container" onClick={sendMessage}>
+    <form className="writing-container" onSubmit={sendMessage}>
       <input
         className="writing"
         type="text"
+        value={message}
         placeholder="Write your Message"
-        onChange={handleChange}
-        value={post}
+        onChange={(e) => {
+          setMessage(e.target.value);
+        }}
       />
       <button className="send-button">
         <AiOutlineSend style={{ fontSize: "150%", color: "#EAEAEA" }} />

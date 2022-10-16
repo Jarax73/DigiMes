@@ -6,13 +6,18 @@ import SignUp from "./components/SignUp";
 import Menu from "./components/Menu";
 import Welcome from "./components/Welcome";
 import axios from "axios";
+import SignIn from "./components/SignUp";
+import io from "socket.io-client";
+const socket = io.connect("http://localhost:5000");
 
 export const AppContext = createContext();
-
+console.log(socket.emit());
 function App() {
   const [user, setUser] = useState([]);
   const [discussion, setDiscussion] = useState([]);
   const [token, setToken] = useState([]);
+  const [message, setMessage] = useState("");
+  const [messageReceived, setMessageReceived] = useState("");
 
   useEffect(() => {
     const storage = window.localStorage.getItem("token");
@@ -44,9 +49,42 @@ function App() {
     e.target.reset();
   };
 
+  const sendMessage = (e) => {
+    e.preventDefault();
+    socket.emit("send_message", { message });
+    setMessage("");
+  };
+
+  useEffect(() => {
+    socket.on(
+      "receive_message",
+      (data) => {
+        setMessageReceived(data.message);
+      },
+      [socket]
+    );
+  });
+
+  const logout = () => {
+    window.localStorage.removeItem("token");
+    window.localStorage.removeItem("user");
+    window.location.href = "http://localhost:3002/login";
+  };
+
   return (
     <AppContext.Provider
-      value={{ Jakaps, discussion, user, logUser, setDiscussion }}
+      value={{
+        Jakaps,
+        discussion,
+        user,
+        logUser,
+        logout,
+        setDiscussion,
+        message,
+        setMessage,
+        sendMessage,
+        messageReceived,
+      }}
     >
       <div className="container">
         {!token ? (
@@ -56,6 +94,7 @@ function App() {
             <Menu />
             <Routes>
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/login" element={<SignIn />} />
               <Route exact path="/" element={<Home />} />
             </Routes>
           </>
