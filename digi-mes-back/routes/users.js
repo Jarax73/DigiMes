@@ -8,6 +8,7 @@ const passport = require("passport");
 router.post("/register", userCtrl.signup);
 router.post("/login", userCtrl.login);
 router.delete("/:id", userCtrl.deleteUser);
+router.get("/", userMiddleware, userCtrl.getUsers);
 router.get(
     "/",
     passport.authenticate("jwt", { session: false }),

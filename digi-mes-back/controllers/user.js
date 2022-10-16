@@ -68,7 +68,12 @@ exports.login = (request, response) => {
         return response.status(200).json({
             success: true,
             message: "Logged In successfully",
-            user,
+            user: {
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+            },
             token: `Bearer ${token}`,
         });
     });

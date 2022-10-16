@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js"
+    "start": "nodemon app.js"
   },
   "author": "",
   "license": "ISC",
@@ -15,12 +15,14 @@
   },
   "dependencies": {
     "bcrypt": "^5.1.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "envs": "^0.1.6",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.5",
     "mongoose-unique-validator": "^3.1.0",
     "passport": "^0.6.0",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "socket.io": "^4.5.2"
   }
 }
