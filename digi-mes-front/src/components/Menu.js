@@ -1,6 +1,7 @@
 import React, { useContext } from "react";
 import { BsChatDotsFill } from "react-icons/bs";
 import { TbLogout } from "react-icons/tb";
+import { Link } from "react-router-dom";
 import { AppContext } from "../App";
 
 export default function Menu() {
@@ -20,11 +21,11 @@ export default function Menu() {
         </div>
       </div>
       <div className="path-user">
-        <div className="message">
+        <Link to="/" className="message">
           <BsChatDotsFill
             style={{ fontSize: "50px", paddingLeft: "25%", color: "#fff" }}
           />
-        </div>
+        </Link>
       </div>
       <div className="logout" onClick={logout}>
         <TbLogout style={{ fontSize: "50px", color: "#eaeaea" }} />

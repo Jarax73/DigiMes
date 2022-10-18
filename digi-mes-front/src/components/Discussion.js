@@ -1,50 +1,85 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-// import { response } from "../../../digi-mes-back/app";
 import { AppContext } from "../App";
 import Discuss from "./Discuss";
 import WriteMessage from "./WriteMessage";
 
 export default function Discussion() {
-  const { Jakaps, discussion, setDiscussion, messageReceived } =
-    useContext(AppContext);
+  const {
+    Jakaps,
+    // discussion,
+    message,
+    setMessage,
+    // setDiscussion,
+    messageReceived,
+    setMessageReceived,
+    socket,
+    user,
+  } = useContext(AppContext);
 
   const [post, setPost] = useState("");
   const [id, setId] = useState("");
+  // const [showMessage, setShowMessage] = useState([]);
 
-  const userToPost = {
-    discussion: post,
+  useEffect(() => {
+    // axios
+    //   .get("http://localhost:5000/api/discussions/", {
+    //     headers: {
+    //       Accept: "application/json",
+    //       "Content-type": "application/json",
+    //     },
+    //   })
+    //   .then((response) => setDiscussion(response.data));
+
+    socket.current.on("receive_message", (data) => {
+      setMessageReceived((list) => [...list, data]);
+    });
+
+    // setShowMessage(messageReceived);
+  }, []);
+
+  // console.log(messageReceived);
+  // console.log(showMessage);
+  // const sendMessage = (e) => {
+  //   e.preventDefault();
+  //   axios({
+  //     method: "POST",
+  //     url: "http://localhost:5000/api/discussions",
+
+  //     data: userToPost,
+  //   })
+  //     .then((response) => response)
+  //     .catch((error) => error);
+  //   setPost("");
+  // };
+
+  const sendMessage = async (e) => {
+    e.preventDefault();
+    if (message !== "") {
+      const messageData = {
+        room: "",
+        sender: user.id,
+        username: user.firstName + " " + user.lastName,
+        message,
+        time:
+          new Date(Date.now()).getHours() +
+          ":" +
+          new Date(Date.now()).getMinutes(),
+      };
+      await socket.current.emit("send_message", messageData);
+      setMessageReceived((list) => [...list, messageData]);
+    }
+    setMessage("");
   };
   console.log(messageReceived);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/discussions/", {
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json",
-        },
-      })
-      .then((response) => setDiscussion(response.data));
-  }, []);
-
-  const sendMessage = (e) => {
-    e.preventDefault();
-    axios({
-      method: "POST",
-      url: "http://localhost:5000/api/discussions",
-
-      data: userToPost,
-    })
-      .then((response) => response)
-      .catch((error) => error);
-    setPost("");
-  };
   const deleteMessage = (id) => {
     axios.delete(`http://localhost:5000/api/discussions/${id}`).then((res) => {
       res.data;
     });
   };
+  console.log(socket.current);
+  console.log(user.id);
 
   const handleChange = (e) => {
     setPost(e.target.value);
@@ -62,30 +97,28 @@ export default function Discussion() {
         </div>
       </header>
       <hr style={{ width: "90%" }} />
-      {discussion.length === 0 ? (
+      {/* {discussion.length === 0 ? (
         <div
           style={{ justifySelf: "center", alignSelf: "center", height: "100%" }}
         >
           Loading...
         </div>
-      ) : (
-        <div className="to-discuss">
-          {/* {discussion.map((discuss) => ( */}
-          <div
-            className="discuss-style"
-            // key={discuss._id}
-          >
+      ) : ( */}
+      <div className="to-discuss">
+        {messageReceived.map((messageContent) => {
+          return (
             <Discuss
-              // discuss={discuss}
               id={id}
+              key={messageContent._id}
               setId={setId}
+              user={user}
               deleteMessage={deleteMessage}
-              messageReceived={messageReceived}
+              messageContent={messageContent}
             />
-          </div>
-          {/* ))} */}
-        </div>
-      )}
+          );
+        })}
+      </div>
+      {/* )} */}
       <div className="send-message">
         <hr style={{ width: "90%", marginBottom: "20px" }} />
         <WriteMessage

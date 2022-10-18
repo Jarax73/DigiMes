@@ -1,24 +1,41 @@
-
-import React, { useContext} from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 import { AppContext } from "../App";
 
-export default function SignIn(){
-    
-    const { logUser } = useContext(AppContext);
+export default function SignIn({ shown, setIsShown }) {
+  SignIn.propTypes = {
+    shown: PropTypes.bool,
+    setIsShown: PropTypes.func,
+  };
+  const { logUser } = useContext(AppContext);
 
-    return <div className='sign'>
+  console.log(shown);
+  const handleChange = () => {
+    setIsShown(false);
+  };
 
-    <div className='welcome'>
-    
-        <form className="signin" onSubmit={logUser} >
+  return (
+    <div className="sign">
+      <div className="welcome">
+        {shown ? (
+          <form className="signin" onSubmit={logUser}>
             <label htmlFor="mail">E-mail</label>
-            <input type="email" id="mail" name="mail"/>
+            <input type="email" id="mail" name="mail" />
             <label htmlFor="password">Password</label>
-            <input type="password" id="password" name="password"/>
-            <button type="submit" className="sign-submit">Sign In</button>
-        <p className="signup-appeal" >Don’t have an account ? <Link to="/signup">Sign up</Link></p>
-        </form>
-        </div>
-        </div>
+            <input type="password" id="password" name="password" />
+            <button type="submit" className="sign-submit">
+              Sign In
+            </button>
+            <p className="signup-appeal">
+              Don’t have an account ?{" "}
+              <Link to="/signup" onClick={handleChange}>
+                Sign up
+              </Link>
+            </p>
+          </form>
+        ) : null}
+      </div>
+    </div>
+  );
 }

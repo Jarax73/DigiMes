@@ -1,10 +1,13 @@
 import React, { useContext } from "react";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 import { AiOutlineSend } from "react-icons/ai";
 import { AppContext } from "../App";
 
-export default function WriteMessage() {
-  const { sendMessage, setMessage, message } = useContext(AppContext);
+export default function WriteMessage({ sendMessage }) {
+  WriteMessage.propTypes = {
+    sendMessage: PropTypes.func,
+  };
+  const { setMessage, message } = useContext(AppContext);
 
   return (
     <form className="writing-container" onSubmit={sendMessage}>

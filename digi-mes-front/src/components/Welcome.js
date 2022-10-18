@@ -1,15 +1,18 @@
-import React from 'react';
-import SignIn from './SignIn';
-// import SignUp from './SignUp';
+import React, { useState } from "react";
+import SignIn from "./SignIn";
+import SignUp from "./SignUp";
 
-export default function Welcome(){
-    return <div className='sign'>
-
-    <div className='welcome'>
-         <div className="introduction" >Bienvenue dans notre application de messagerie <br/>
-        DigiMes</div>
-        <SignIn/>
-        {/* <SignUp /> */}
-    </div> 
+export default function Welcome() {
+  const [shown, setIsShown] = useState(true);
+  return (
+    <div className="sign">
+      <div className="welcome">
+        <div className="introduction">
+          Bienvenue dans notre application de messagerie <br />
+          DigiMes
+        </div>
+        {shown ? <SignIn shown={shown} setIsShown={setIsShown} /> : <SignUp />}
+      </div>
     </div>
+  );
 }
