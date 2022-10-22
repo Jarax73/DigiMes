@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 import React, { createContext, useEffect, useRef, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Jakaps from "./assets/jakaps.jpg";
@@ -13,7 +14,13 @@ import Welcome from "./components/Welcome";
 
 export const AppContext = createContext();
 function App() {
-  const socket = useRef(io.connect("http://localhost:5000"));
+  const socket = useRef(
+    io.connect(
+      process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_API_PROD_URL
+        : process.env.REACT_APP_API_DEV_URL
+    )
+  );
   console.log(socket.id);
   const [user, setUser] = useState([]);
   const [discussion, setDiscussion] = useState([]);
@@ -54,12 +61,14 @@ function App() {
 
     axios({
       method: "POST",
-      url: "http://localhost:5000/api/auth/login",
+      url:
+        process.env.NODE_ENV === "production"
+          ? `${process.env.REACT_APP_PROD_API_URL}/api/auth/login`
+          : `${process.env.REACT_APP_DEV_API_URL}/api/auth/login`,
       data: user,
     })
       .then((response) => {
-        if (response.data.success === true)
-          window.location.href = "http://localhost:3000/";
+        if (response.data.success === true) window.location.href = "/";
 
         window.localStorage.setItem("token", response.data.token.split(" ")[1]);
         window.localStorage.setItem("user", JSON.stringify(response.data.user));
@@ -71,7 +80,7 @@ function App() {
   const logout = () => {
     window.localStorage.removeItem("token");
     window.localStorage.removeItem("user");
-    window.location.href = "http://localhost:3000/login";
+    window.location.href = "/login";
   };
 
   return (
