@@ -6,6 +6,7 @@ const { Server } = require("socket.io");
 const app = express();
 const dotenv = require("dotenv");
 const passport = require("passport");
+const Message = require("./models/discussion");
 dotenv.config();
 // const User = require("./models/users");
 const userRoutes = require("./routes/users");
@@ -20,24 +21,47 @@ app.use(passport.initialize());
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3002",
+        origin: "http://localhost:3000",
         methods: ["GET", "POST", "PUT", "DELETE"],
     },
 });
 
+global.onlineUsers = new Map();
+
 io.on("connection", (socket) => {
-    console.log(`User connected: ${socket.id}`);
-
-    // socket.on("join_room", (data) => {
-    //     socket.join(data);
-    // });
-
     // socket.on("send_message", (data) => {
-    //     socket.to(data.room).emit("received_message", data);
+    //     console.log(data);
+    //     if (sendUserSocket) {
+    //         Message.find().then((result) => {
+    //             socket.to(sendUserSocket).emit("msg_received", result);
+    //         });
+    //     }
     // });
 
-    socket.on("send_message", (data) => {
-        socket.broadcast.emit("receive_message", data);
+    // console.log(`User connected: ${socket.id}`);
+
+    // Message.find().then((result) => {
+    //     socket.emit("output_messages", result);
+    // });
+
+    socket.on("disconnect", () => {
+        console.log("User disconnected");
+    });
+
+    socket.on("chat_message", (data) => {
+        // console.log(data);
+        const sendUserSocket = data.to;
+        console.log(data.sender);
+        const messages = new Message({ ...data.discussion });
+        if (sendUserSocket) {
+            messages
+                .save()
+                .then(() =>
+                    socket
+                        .to(sendUserSocket)
+                        .emit("message", data.sender.id, data.discussion)
+                );
+        }
     });
 });
 
@@ -52,13 +76,13 @@ mongoose
     .then(() => console.log("Connexion à MongoDB réussie !"))
     .catch(() => console.log("Connexion à MongoDB échouée !"));
 
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader(
+app.use((request, response, next) => {
+    response.setHeader("Access-Control-Allow-Origin", "*");
+    response.setHeader(
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
     );
-    res.setHeader(
+    response.setHeader(
         "Access-Control-Allow-Methods",
         "GET, POST, PUT, DELETE, PATCH, OPTIONS"
     );
@@ -66,7 +90,7 @@ app.use((req, res, next) => {
 });
 
 // app.use("/api/user", todiscuss);
-app.use("/api/auth", userRoutes);
+app.use("/api/", userRoutes);
 app.use("/api/discussions", discussionsRoutes);
 
 module.exports = app;

@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-export default function SignIn() {
+export default function SignU() {
   const [user, setUser] = useState({});
   console.log(user);
   const createUser = (e) => {

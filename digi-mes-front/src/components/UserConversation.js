@@ -1,22 +1,42 @@
-import React, { useContext } from "react";
-import { Link } from "react-router-dom";
+import axios from "axios";
+import PropTypes from "prop-types";
+import React, { useContext, useEffect } from "react";
 import { AppContext } from "../App";
 
-export default function UserConversation() {
-  const { Jakaps, userToChat } = useContext(AppContext);
-  // const { id } = useParams();
-  // console.log(id);
+export default function UserConversation({ setShown }) {
+  UserConversation.propTypes = {
+    setShown: PropTypes.func,
+  };
+  const { Jakaps, token, friends, setFriend, setOneUser, setId } =
+    useContext(AppContext);
+
+  useEffect(() => {
+    axios
+      .get("http://localhost:5000/api/users", {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => setFriend(response.data));
+  }, []);
+
   return (
     <div className="users-discuss">
-      {userToChat.length === 0 ? (
-        <div>loading...</div>
+      {friends.length === 0 ? (
+        <div style={{ margin: "5% 5%" }}>loading...</div>
       ) : (
-        userToChat.map((chatRoom) => {
+        friends.map((friend) => {
           return (
-            <Link
-              to={`/discussions/${chatRoom._id}`}
+            <div
               style={{ textDecoration: "none" }}
-              key={chatRoom._id}
+              key={friend._id}
+              onClick={() => {
+                setShown(true);
+                setId(friend._id);
+                setOneUser(friend);
+              }}
             >
               <div className="conversation">
                 <div className="conversation-img">
@@ -24,46 +44,15 @@ export default function UserConversation() {
                 </div>
                 <div className="info-conversation">
                   <h3>
-                    {chatRoom.firstName} {chatRoom.lastName}{" "}
+                    {friend.firstName} {friend.lastName}{" "}
                   </h3>
                   <p>Message</p>
                 </div>
               </div>
-            </Link>
+            </div>
           );
         })
       )}
-      <h1 style={{ paddingLeft: "20px" }}>Recent</h1>
-      <div className="conversation">
-        <div className="conversation-img">
-          <img className="user-avatar" src={Jakaps} alt="user" />
-        </div>
-        <div className="info-conversation">
-          <h3>Raghav</h3>
-          <p>Message</p>
-        </div>
-      </div>
-      <hr style={{ width: "90%" }}></hr>
-      <div className="conversation">
-        <div className="conversation-img">
-          <img className="user-avatar" src={Jakaps} alt="user" />
-        </div>
-        <div className="info-conversation">
-          <h3>Raghav</h3>
-          <p>Message</p>
-        </div>
-      </div>
-      <hr style={{ width: "90%" }}></hr>
-      <div className="conversation">
-        <div className="conversation-img">
-          <img className="user-avatar" src={Jakaps} alt="user" />
-        </div>
-        <div className="info-conversation">
-          <h3>Raghav</h3>
-          <p>Message</p>
-        </div>
-      </div>
-      <hr style={{ width: "90%" }}></hr>
     </div>
   );
 }

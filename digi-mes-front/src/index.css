@@ -156,6 +156,7 @@ code {
     max-width: 500px;
     height: 100%;
     border-radius: 15px;
+    overflow-y: auto;
 }
 .conversation{
     display: flex;
@@ -182,7 +183,7 @@ code {
     display: flex;
     flex-direction: column;
     flex: 1;
-    overflow-y: scroll;
+    overflow-y: auto;
     scroll-behavior: smooth;
     width: 90%;
     margin: auto;

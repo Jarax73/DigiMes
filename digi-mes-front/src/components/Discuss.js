@@ -32,8 +32,6 @@ export default function Discuss({
       />
     </div>
   );
-  console.log(messageContent.sender);
-  console.log(user.id);
 
   return (
     <>
@@ -41,9 +39,9 @@ export default function Discuss({
       <div
         className="discuss-border"
         onClick={handleMessage}
-        id={messageContent.sender === user.id ? "me" : "other"}
+        id={messageContent.sender.id === user.id ? "me" : "other"}
       >
-        <p style={{ alignSelf: "flex-end" }}>{messageContent.message}</p>
+        <p style={{ alignSelf: "flex-end" }}>{messageContent.discussion}</p>
       </div>
     </>
   );

@@ -9,6 +9,7 @@ exports.signup = async (request, response) => {
         lastName: request.body.lastName,
         email: request.body.email,
         password: await bcrypt.hashSync(request.body.password, 10),
+        imageUrl: request.body.imageUrl,
     });
 
     user.save()
@@ -19,6 +20,8 @@ exports.signup = async (request, response) => {
                 user: {
                     id: user._id,
                     email: user.email,
+                    password: user.password,
+                    imageUrl: user.imageUrl,
                 },
             });
         })
@@ -33,7 +36,14 @@ exports.signup = async (request, response) => {
 
 exports.getUsers = (request, response) => {
     User.find()
-        .then((users) => response.status(200).json({ users }))
+        .then((users) => response.status(200).json(users))
+        .catch((error) => response.status(500).json({ error }));
+};
+
+exports.getUser = (request, response) => {
+    console.log(request.query.firstName);
+    User.find({ firstName: request.query.firstName })
+        .then((user) => response.status(200).json(user))
         .catch((error) => response.status(500).json({ error }));
 };
 

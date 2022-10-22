@@ -4,29 +4,46 @@ import Jakaps from "./assets/jakaps.jpg";
 import Home from "./components/Home";
 import SignUp from "./components/SignUp";
 import Menu from "./components/Menu";
-import Welcome from "./components/Welcome";
 import axios from "axios";
-import SignIn from "./components/SignUp";
+import SignIn from "./components/SignIn";
 import SearchUser from "./components/SearchUser";
 import { io } from "socket.io-client";
 import Discussion from "./components/Discussion";
+import Welcome from "./components/Welcome";
 
 export const AppContext = createContext();
-// console.log(socket.emit());
 function App() {
   const socket = useRef(io.connect("http://localhost:5000"));
+  console.log(socket.id);
   const [user, setUser] = useState([]);
   const [discussion, setDiscussion] = useState([]);
-  const [token, setToken] = useState([]);
+  const [token, setToken] = useState("");
   const [message, setMessage] = useState("");
   const [messageReceived, setMessageReceived] = useState([]);
   const [userToChat, setUserToChat] = useState([]);
-  console.log(socket.current);
+  // const [room, setRoom] = useState("");
+  const [friends, setFriend] = useState([]);
+  const [oneUser, setOneUser] = useState({});
+  const [id, setId] = useState("");
+  console.log(message);
   useEffect(() => {
     const storage = window.localStorage.getItem("token");
     setToken(storage);
     setUser(JSON.parse(window.localStorage.getItem("user")));
   }, []);
+
+  useEffect(() => {
+    socket.current.on("message", (data) => {
+      setMessage(data);
+    });
+  }, []);
+
+  // useEffect(() => {
+  //   socket.current.on("output_messages", (data) => console.log(data));
+  // }, []);
+
+  console.log(message);
+  console.log(id);
 
   const logUser = (e) => {
     e.preventDefault();
@@ -46,7 +63,6 @@ function App() {
 
         window.localStorage.setItem("token", response.data.token.split(" ")[1]);
         window.localStorage.setItem("user", JSON.stringify(response.data.user));
-        console.log(response.data.token.split(" ")[1]);
       })
       .catch((error) => error);
     e.target.reset();
@@ -75,17 +91,27 @@ function App() {
         messageReceived,
         userToChat,
         setUserToChat,
+        // setRoom,
+        friends,
+        setFriend,
+        oneUser,
+        setOneUser,
+        id,
+        setId,
       }}
     >
       <div className="container">
         {!token ? (
-          <Welcome />
+          <Routes>
+            <Route path="/" element={<Welcome />}>
+              <Route path="/login" element={<SignIn />} />
+              <Route path="/signup" element={<SignUp />} />
+            </Route>
+          </Routes>
         ) : (
           <>
             <Menu />
             <Routes>
-              <Route path="/signup" element={<SignUp />} />
-              <Route path="/login" element={<SignIn />} />
               <Route path="/search" element={<SearchUser />} />
               <Route path="/discussions/:id" element={<Discussion />} />
               <Route exact path="/" element={<Home />} />
