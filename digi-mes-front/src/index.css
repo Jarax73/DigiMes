@@ -182,7 +182,6 @@ code {
 .to-discuss{
     display: flex;
     flex-direction: column;
-    flex: 1;
     overflow-y: auto;
     scroll-behavior: smooth;
     width: 90%;

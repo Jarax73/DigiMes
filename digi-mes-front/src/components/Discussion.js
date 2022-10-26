@@ -1,66 +1,17 @@
-import React, { useContext, useEffect, useState } from "react";
-import axios from "axios";
+import React, { useContext } from "react";
+// import axios from "axios";
 import { AppContext } from "../App";
-import Discuss from "./Discuss";
+// import Discuss from "./Discuss";
 import WriteMessage from "./WriteMessage";
-// import { useParams } from "react-router-dom";
 
 export default function Discussion() {
-  const {
-    Jakaps,
-    message,
-    setMessage,
-    id,
-    oneUser,
-    messageReceived,
-    setMessageReceived,
-    socket,
-    user,
-  } = useContext(AppContext);
+  const { Jakaps, oneUser } = useContext(AppContext);
 
-  const [post, setPost] = useState("");
-
-  useEffect(() => {
-    socket.current.on("message", (data) => {
-      console.log(data);
-      setMessageReceived((list) => [...list, data]);
-    });
-  }, []);
-
-  console.log(messageReceived);
-
-  const sendMessage = async (e) => {
-    e.preventDefault();
-    if (message !== "") {
-      const messageData = {
-        time:
-          new Date(Date.now()).getDay() +
-          " " +
-          new Date(Date.now()).getDate() +
-          ", " +
-          new Date(Date.now()).getHours() +
-          ":" +
-          new Date(Date.now()).getMinutes(),
-        discussion: message,
-        to: id,
-        sender: user,
-      };
-      await socket.current.emit("chat_message", messageData);
-      setMessageReceived((list) => [...list, messageData]);
-      // console.log(messageData._id);
-    }
-    setMessage("");
-  };
-
-  const deleteMessage = (id) => {
-    axios.delete(`http://localhost:5000/api/discussions/${id}`).then((res) => {
-      res.data;
-    });
-  };
-
-  const handleChange = (e) => {
-    setPost(e.target.value);
-  };
+  // const deleteMessage = (id) => {
+  //   axios.delete(`http://localhost:5000/api/discussions/${id}`).then((res) => {
+  //     res.data;
+  //   });
+  // };
 
   return (
     <section className="discuss">
@@ -74,15 +25,8 @@ export default function Discussion() {
         </div>
       </header>
       <hr style={{ width: "90%" }} />
-      {/* {discussion.length === 0 ? (
-        <div
-          style={{ justifySelf: "center", alignSelf: "center", height: "100%" }}
-        >
-          Loading...
-        </div>
-      ) : ( */}
       <div className="to-discuss">
-        {messageReceived.map((messageContent) => {
+        {/* {messageReceived.map((messageContent) => {
           return (
             <Discuss
               id={id}
@@ -92,16 +36,12 @@ export default function Discussion() {
               messageContent={messageContent}
             />
           );
-        })}
+        })} */}
+        Non
       </div>
-      {/* )} */}
       <div className="send-message">
         <hr style={{ width: "90%", marginBottom: "20px" }} />
-        <WriteMessage
-          handleChange={handleChange}
-          sendMessage={sendMessage}
-          post={post}
-        />
+        <WriteMessage />
       </div>
     </section>
   );
