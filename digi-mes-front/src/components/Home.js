@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import Discussion from "./Discussion";
 import SearchUser from "./SearchUser";
-import UserConversation from "./UserConversation";
 import WelcomeMessage from "./WelcomeMessage";
+import Friends from "./Friends";
 // import User from "./User";
 
 export default function Home() {
@@ -12,7 +12,7 @@ export default function Home() {
       {/* <User /> */}
       <section className="users">
         <SearchUser />
-        <UserConversation setShown={setShown} />
+        <Friends setShown={setShown} />
       </section>
       <section className="discuss">
         {shown === false ? <WelcomeMessage /> : <Discussion />}

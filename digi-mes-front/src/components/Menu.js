@@ -1,11 +1,16 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { BsChatDotsFill } from "react-icons/bs";
 import { TbLogout } from "react-icons/tb";
-import { Link } from "react-router-dom";
+import { RiContactsFill } from "react-icons/ri";
 import { AppContext } from "../App";
 
 export default function Menu() {
-  const { Jakaps, user, logout } = useContext(AppContext);
+  const { Jakaps, user, socket, logout, setShowFriends } =
+    useContext(AppContext);
+  useEffect(() => {
+    if (user.length === 0) return;
+    socket.current.emit("logged_in", user);
+  }, [user]);
   return (
     <nav className="menu">
       <div className="image-user">
@@ -21,11 +26,17 @@ export default function Menu() {
         </div>
       </div>
       <div className="path-user">
-        <Link to="/" className="message">
+        <div className="message" onClick={() => setShowFriends(false)}>
           <BsChatDotsFill
             style={{ fontSize: "50px", paddingLeft: "25%", color: "#fff" }}
           />
-        </Link>
+        </div>
+
+        <div className="message" onClick={() => setShowFriends(true)}>
+          <RiContactsFill
+            style={{ fontSize: "50px", paddingLeft: "25%", color: "#fff" }}
+          />
+        </div>
       </div>
       <div className="logout" onClick={logout}>
         <TbLogout style={{ fontSize: "50px", color: "#eaeaea" }} />

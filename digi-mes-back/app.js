@@ -21,12 +21,13 @@ app.use(passport.initialize());
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin: "http://localhost:3000",
+        origin: "http://localhost:3008",
         methods: ["GET", "POST", "PUT", "DELETE"],
     },
 });
 
-global.onlineUsers = new Map();
+let clientSocketIds = [];
+let connectedUsers = [];
 
 io.on("connection", (socket) => {
     // socket.on("send_message", (data) => {
@@ -38,7 +39,17 @@ io.on("connection", (socket) => {
     //     }
     // });
 
-    // console.log(`User connected: ${socket.id}`);
+    socket.on("logged_in", (user) => {
+        console.log(user.id);
+        clientSocketIds.push({ socket: socket, userId: user.id });
+        connectedUsers = connectedUsers.filter((item) => item.id != user.id);
+        connectedUsers.push({ ...user, socket: socket.id });
+        io.emit("updated_list", connectedUsers);
+    });
+    console.log(connectedUsers);
+    console.log(clientSocketIds);
+
+    console.log(`User connected: ${socket.id}`);
 
     // Message.find().then((result) => {
     //     socket.emit("output_messages", result);
@@ -46,6 +57,10 @@ io.on("connection", (socket) => {
 
     socket.on("disconnect", () => {
         console.log("User disconnected");
+        connectedUsers = connectedUsers.filter(
+            (item) => item.sockedId !== socket.id
+        );
+        io.emit("updated_list", connectedUsers);
     });
 
     socket.on("chat_message", (data) => {
