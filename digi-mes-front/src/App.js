@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-import React, { createContext, useEffect, useState } from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Jakaps from "./assets/jakaps.jpg";
 import Home from "./components/Home";
@@ -7,6 +7,7 @@ import SignUp from "./components/SignUp";
 import Menu from "./components/Menu";
 import axios from "axios";
 import SignIn from "./components/SignIn";
+import io from "socket.io-client";
 // import SearchUser from "./components/SearchUser";
 
 // import Discussion from "./components/Discussion";
@@ -14,17 +15,29 @@ import Welcome from "./components/Welcome";
 
 export const AppContext = createContext();
 function App() {
-  console.log(process.env.NODE_ENV);
-  console.log(process.env.REACT_APP_DEV_API_URL);
+  const apiUrl =
+    process.env.NODE_ENV === "production"
+      ? process.env.REACT_APP_PROD_API_URL
+      : process.env.REACT_APP_DEV_API_URL;
+
+  const socket = useRef(
+    io(
+      process.env.NODE_ENV === "production"
+        ? process.env.REACT_APP_PROD_API_URL
+        : process.env.REACT_APP_DEV_API_URL
+    )
+  );
 
   const [user, setUser] = useState([]);
   const [discussion, setDiscussion] = useState([]);
   const [token, setToken] = useState("");
   const [message, setMessage] = useState("");
+  const [messageReceived, setMessageReceived] = useState([]);
   const [friends, setFriend] = useState([]);
   const [oneUser, setOneUser] = useState({});
   const [id, setId] = useState("");
-  console.log(message);
+  const [room, setRoom] = useState("");
+
   useEffect(() => {
     const storage = window.localStorage.getItem("token");
     setToken(storage);
@@ -42,8 +55,8 @@ function App() {
       method: "POST",
       url:
         process.env.NODE_ENV === "production"
-          ? `${process.env.REACT_APP_PROD_API_URL}api/auth/login`
-          : `${process.env.REACT_APP_DEV_API_URL}api/auth/login`,
+          ? `${apiUrl}api/auth/login`
+          : `${apiUrl}api/auth/login`,
       data: user,
     })
       .then((response) => {
@@ -56,6 +69,17 @@ function App() {
     e.target.reset();
   };
 
+  const createRoom = (id) => {
+    let room = Date.now() + Math.random();
+    room = room.toString().replace(".", "_");
+    setRoom(room);
+    socket.current.emit("create", {
+      room: room,
+      userId: user.id,
+      friendId: id,
+    });
+  };
+
   const logout = () => {
     window.localStorage.removeItem("token");
     window.localStorage.removeItem("user");
@@ -66,8 +90,12 @@ function App() {
     <AppContext.Provider
       value={{
         token,
+        socket,
         Jakaps,
+        apiUrl,
         discussion,
+        messageReceived,
+        setMessageReceived,
         user,
         logUser,
         logout,
@@ -79,7 +107,9 @@ function App() {
         oneUser,
         setOneUser,
         id,
+        room,
         setId,
+        createRoom,
       }}
     >
       <div className="container">

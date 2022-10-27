@@ -1,26 +1,40 @@
-import axios from "axios";
+// import axios from "axios";
 import PropTypes from "prop-types";
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { AppContext } from "../App";
 
 export default function UserConversation({ setShown }) {
   UserConversation.propTypes = {
     setShown: PropTypes.func,
   };
-  const { Jakaps, token, friends, setFriend, setOneUser, setId } =
-    useContext(AppContext);
+  const {
+    Jakaps,
+    // token,
+    // apiUrl,
+    id,
+    friends,
+    // setFriend,
+    // oneUser,
+    setOneUser,
+    setId,
+    createRoom,
+  } = useContext(AppContext);
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:5000/api/users", {
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => setFriend(response.data));
-  }, []);
+  // console.log(token)
+  console.log(id);
+  console.log(friends);
+  // useEffect(() => {
+  //   if (!token) return;
+  //   axios
+  //     .get(`${apiUrl}api/users`, {
+  //       headers: {
+  //         Accept: "application/json",
+  //         "Content-Type": "application/json",
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     })
+  //     .then((response) => setFriend(response.data));
+  // }, [token]);
 
   return (
     <div className="users-discuss">
@@ -31,11 +45,12 @@ export default function UserConversation({ setShown }) {
           return (
             <div
               style={{ textDecoration: "none" }}
-              key={friend._id}
+              key={friend.id}
               onClick={() => {
                 setShown(true);
-                setId(friend._id);
+                setId(friend.id);
                 setOneUser(friend);
+                createRoom(friend.id);
               }}
             >
               <div className="conversation">

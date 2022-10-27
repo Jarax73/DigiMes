@@ -6,13 +6,13 @@ import { AppContext } from "../App";
 // import { Link } from "react-router-dom";
 
 export default function SearchUser() {
-  const { token, userToChat, setUserToChat } = useContext(AppContext);
+  const { token, apiUrl, setUserToChat } = useContext(AppContext);
   const [keySearch, setKeySearch] = useState("");
 
   const searchuser = (e) => {
     e.preventDefault();
     axios
-      .get("http://localhost:5000/api/users", {
+      .get(`${apiUrl}api/users`, {
         headers: {
           Accept: "application/json",
           "Content-type": "application/json",
@@ -25,8 +25,7 @@ export default function SearchUser() {
       .then((response) => setUserToChat(response.data));
     e.target.reset();
   };
-  console.log(userToChat);
-  console.log(keySearch);
+
   return (
     // <>
     <div style={{ display: "flex", flexDirection: "column" }}>

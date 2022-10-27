@@ -1,11 +1,22 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { BsChatDotsFill } from "react-icons/bs";
 import { TbLogout } from "react-icons/tb";
 import { Link } from "react-router-dom";
 import { AppContext } from "../App";
 
 export default function Menu() {
-  const { Jakaps, user, logout } = useContext(AppContext);
+  const { Jakaps, user, logout, socket, setFriend } = useContext(AppContext);
+
+  useEffect(() => {
+    console.log(socket.current);
+    if (!user) return;
+    socket.current.emit("logged_in", user);
+  }, [user]);
+
+  useEffect(() => {
+    socket.current.on("update_list", (data) => setFriend(data));
+  }, []);
+
   return (
     <nav className="menu">
       <div className="image-user">
