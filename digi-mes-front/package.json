@@ -25,7 +25,8 @@
     "start": "PORT=3008 GENERATE_SOURCEMAP=false react-scripts start",
     "build": "react-scripts build",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "prepare": "husky install .config/husky"
   },
   "eslintConfig": {
     "extends": [
@@ -48,6 +49,7 @@
   "devDependencies": {
     "eslint": "^8.24.0",
     "eslint-plugin-react": "^7.31.8",
+    "husky": "^8.0.1",
     "jest": "^27.5.1",
     "prettier": "2.7.1"
   },
