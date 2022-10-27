@@ -41,6 +41,7 @@ exports.getUsers = (request, response) => {
 };
 
 exports.getUser = (request, response) => {
+    console.log(request.query.firstName);
     User.find({ firstName: request.query.firstName })
         .then((user) => response.status(200).json(user))
         .catch((error) => response.status(500).json({ error }));
@@ -54,6 +55,7 @@ exports.login = (request, response) => {
                 message: "Cannot find user",
             });
         }
+        // console.log(user);
 
         const valid = await bcrypt.compare(
             user.password,

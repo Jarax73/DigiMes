@@ -175,7 +175,6 @@ code {
     flex-direction: column;
     justify-content: flex-end;
     width: 100%;
-    cursor: pointer;
 }
 .info-conversation h3{
     margin-bottom: -10px;

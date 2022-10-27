@@ -6,7 +6,7 @@ const { Server } = require("socket.io");
 const app = express();
 const dotenv = require("dotenv");
 const passport = require("passport");
-// const Message = require("./models/discussion");
+const Message = require("./models/discussion");
 dotenv.config();
 // const User = require("./models/users");
 const userRoutes = require("./routes/users");
@@ -21,50 +21,47 @@ app.use(passport.initialize());
 const server = http.createServer(app);
 const io = new Server(server, {
     cors: {
-        origin:
-            process.env.NODE_ENV === "production"
-                ? process.env.REACT_APP_PROD_URL
-                : process.env.REACT_APP_DEV_URL,
+        origin: "http://localhost:3000",
         methods: ["GET", "POST", "PUT", "DELETE"],
     },
 });
-const clientSocketId = [];
-const connectedUsers = [];
-const getSocketByUserId = (userId) => {
-    let socket = "";
-    for (let i = 0; i < clientSocketId.length; i++) {
-        if (clientSocketId[i].userId === userId) {
-            socket = clientSocketId[i].socket;
-            break;
-        }
-    }
-    return socket;
-};
+
+global.onlineUsers = new Map();
+
 io.on("connection", (socket) => {
+    // socket.on("send_message", (data) => {
+    //     console.log(data);
+    //     if (sendUserSocket) {
+    //         Message.find().then((result) => {
+    //             socket.to(sendUserSocket).emit("msg_received", result);
+    //         });
+    //     }
+    // });
+
     // console.log(`User connected: ${socket.id}`);
-    socket.on("logged_in", (user) => {
-        console.log(user);
-        clientSocketId.push({ socket: socket, userId: user.id });
-        connectedUsers.filter((item) => item.id !== user.id);
-        connectedUsers.push({ ...user, socketId: socket.id });
-        console.log(clientSocketId);
-        io.emit("update_list", connectedUsers);
+
+    // Message.find().then((result) => {
+    //     socket.emit("output_messages", result);
+    // });
+
+    socket.on("disconnect", () => {
+        console.log("User disconnected");
     });
 
-    socket.on("create", (data) => {
-        console.log(data.room);
-        socket.join(data.room);
-        let withSocket = getSocketByUserId(data.friendId);
-        console.log(withSocket);
-        socket.broadcast.to(withSocket.id).emit("invite", { room: data });
-    });
-
-    socket.on("join_room", (data) => socket.join(data.room.room));
-    socket.on("message", (data) => {
-        socket.broadcast.to(data.room).emit("message", data);
-    });
-    socket.on("disconnection", () => {
-        connectedUsers.remove({ ...user, socketId: socket.id });
+    socket.on("chat_message", (data) => {
+        // console.log(data);
+        const sendUserSocket = data.to;
+        console.log(data.sender);
+        const messages = new Message({ ...data.discussion });
+        if (sendUserSocket) {
+            messages
+                .save()
+                .then(() =>
+                    socket
+                        .to(sendUserSocket)
+                        .emit("message", data.sender.id, data.discussion)
+                );
+        }
     });
 });
 
