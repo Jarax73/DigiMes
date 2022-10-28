@@ -28,13 +28,13 @@ export default function Menu() {
       <div className="path-user">
         <div className="message" onClick={() => setShowFriends(false)}>
           <BsChatDotsFill
-            style={{ fontSize: "50px", paddingLeft: "25%", color: "#fff" }}
+            style={{ fontSize: "200%", paddingLeft: "25%", color: "#fff" }}
           />
         </div>
 
         <div className="message" onClick={() => setShowFriends(true)}>
           <RiContactsFill
-            style={{ fontSize: "50px", paddingLeft: "25%", color: "#fff" }}
+            style={{ fontSize: "200%", paddingLeft: "25%", color: "#fff" }}
           />
         </div>
       </div>

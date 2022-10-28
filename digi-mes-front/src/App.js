@@ -29,20 +29,17 @@ function App() {
   const [id, setId] = useState("");
   const [connected, setConnected] = useState([]);
   const [showFriends, setShowFriends] = useState(false);
+  const [messageReceived, setMessageReceived] = useState([]);
 
   useEffect(() => {
     const storage = window.localStorage.getItem("token");
     setToken(storage);
     setUser(JSON.parse(window.localStorage.getItem("user")));
   }, []);
-  console.log(user);
 
-  console.log(socket.current);
   useEffect(() => {
     socket.current.on("updated_list", (data) => setConnected(data));
   }, []);
-
-  console.log(connected);
 
   const logUser = (e) => {
     e.preventDefault();
@@ -90,6 +87,8 @@ function App() {
         connected,
         setConnected,
         setDiscussion,
+        messageReceived,
+        setMessageReceived,
         message,
         setMessage,
         friends,

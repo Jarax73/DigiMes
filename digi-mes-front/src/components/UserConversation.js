@@ -23,6 +23,8 @@ export default function UserConversation({ setShown }) {
       .then((response) => setFriend(response.data));
   }, [token]);
 
+  console.log(friends);
+
   return (
     <div className="users-discuss">
       {friends.length === 0 ? (
@@ -45,7 +47,7 @@ export default function UserConversation({ setShown }) {
                 </div>
                 <div className="info-conversation">
                   <h3>
-                    {friend.firstName} {friend.lastName}{" "}
+                    {friend.firstName} {friend.lastName}
                   </h3>
                   <p>Message</p>
                 </div>

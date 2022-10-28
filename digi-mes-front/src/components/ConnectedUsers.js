@@ -10,6 +10,8 @@ export default function UserConversation({ setShown }) {
 
   return (
     <div className="users-discuss">
+      <h2 style={{ margin: "3%" }}>Connected</h2>
+      <hr />
       {connected.length === 0 ? (
         <div style={{ margin: "5% 5%" }}>loading...</div>
       ) : (
