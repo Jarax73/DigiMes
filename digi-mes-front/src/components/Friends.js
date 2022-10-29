@@ -7,7 +7,7 @@ import { AppContext } from "../App";
 
 export default function Friends({ setShown }) {
   Friends.propTypes = {
-    setShown: PropTypes.bool,
+    setShown: PropTypes.func,
   };
   const { showFriends } = useContext(AppContext);
   return (
