@@ -22,7 +22,7 @@ export default function Discussion() {
     const messageData = {
       time: Date.now(),
       discussion: message,
-      to: oneUser,
+      to: oneUser.socket,
       socket: socket.current.id,
       sender: user,
     };
@@ -32,14 +32,12 @@ export default function Discussion() {
   };
   useEffect(() => {
     socket.current.on("private_message", (data) => {
-      if (data.to.id == user.id) {
+      if (data.to === socket.current.id) {
         setMessageReceived((list) => [...list, data]);
       }
       console.log(data);
     });
   }, [socket]);
-
-  console.log(messageReceived);
 
   const deleteMessage = (id) => {
     axios.delete(`http://localhost:5000/api/discussions/${id}`).then((res) => {
