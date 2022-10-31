@@ -17,6 +17,8 @@ export default function Discussion() {
     setMessageReceived,
   } = useContext(AppContext);
 
+  console.log(messageReceived);
+
   const sendMessage = (e) => {
     e.preventDefault();
     const messageData = {

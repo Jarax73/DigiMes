@@ -1,5 +1,11 @@
 /* eslint-disable no-undef */
-import React, { createContext, useEffect, useRef, useState } from "react";
+import React, {
+  createContext,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Routes, Route } from "react-router-dom";
 import Jakaps from "./assets/jakaps.jpg";
 import Home from "./components/Home";
@@ -36,10 +42,14 @@ function App() {
     setToken(storage);
     setUser(JSON.parse(window.localStorage.getItem("user")));
   }, []);
-
+  console.log(user);
   useEffect(() => {
-    socket.current.on("updated_list", (data) => setConnected(data));
+    socket.current.on("updated_list", (data) => {
+      console.log(data);
+      setConnected(data);
+    });
   }, []);
+  console.log(connected);
 
   const logUser = (e) => {
     e.preventDefault();
@@ -74,33 +84,59 @@ function App() {
     window.location.href = "/";
   };
 
+  const val = useMemo(
+    () => ({
+      token,
+      Jakaps,
+      discussion,
+      user,
+      logUser,
+      logout,
+      socket,
+      connected,
+      setConnected,
+      setDiscussion,
+      messageReceived,
+      setMessageReceived,
+      message,
+      setMessage,
+      friends,
+      showFriends,
+      setShowFriends,
+      setFriend,
+      oneUser,
+      setOneUser,
+      id,
+      setId,
+    }),
+    [
+      token,
+      Jakaps,
+      discussion,
+      user,
+      logUser,
+      logout,
+      socket,
+      connected,
+      setConnected,
+      setDiscussion,
+      messageReceived,
+      setMessageReceived,
+      message,
+      setMessage,
+      friends,
+      showFriends,
+      setShowFriends,
+      setFriend,
+      oneUser,
+      setOneUser,
+      id,
+      setId,
+    ]
+  );
+
   return (
-    <AppContext.Provider
-      value={{
-        token,
-        Jakaps,
-        discussion,
-        user,
-        logUser,
-        logout,
-        socket,
-        connected,
-        setConnected,
-        setDiscussion,
-        messageReceived,
-        setMessageReceived,
-        message,
-        setMessage,
-        friends,
-        showFriends,
-        setShowFriends,
-        setFriend,
-        oneUser,
-        setOneUser,
-        id,
-        setId,
-      }}
-    >
+    <AppContext.Provider value={val}>
       <div className="container">
         {token === null ? (
           <div className="sign">

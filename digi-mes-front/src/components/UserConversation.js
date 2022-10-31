@@ -34,10 +34,10 @@ export default function UserConversation({ setShown }) {
           return (
             <div
               style={{ textDecoration: "none" }}
-              key={friend._id}
+              key={friend.id}
               onClick={() => {
                 setShown(true);
-                setId(friend._id);
+                setId(friend.id);
                 setOneUser(friend);
               }}
             >
