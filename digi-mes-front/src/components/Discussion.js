@@ -23,16 +23,17 @@ export default function Discussion() {
   const sendMessage = (e) => {
     e.preventDefault();
     const messageData = {
+      time: Date.now(),
       discussion: message,
       to: id,
-      // socketTo: oneUser.socket,
-      // socket: socket.current.id,
-      sender: user._id,
+      socketTo: oneUser.socket,
+      socket: socket.current.id,
+      sender: user,
     };
     socket.current.emit("private_message", messageData);
     setConnected((prevState) =>
       prevState.map((connected) => {
-        return connected._id === messageData.to
+        return connected.id === messageData.to
           ? {
               ...connected,
               messages: [...connected.messages, messageData],
@@ -44,8 +45,7 @@ export default function Discussion() {
   };
   useEffect(() => {
     socket.current.on("private_message", (data) => {
-      console.log(data);
-      if (data.to === user._id) {
+      if (data.socketTo === socket.current.id) {
         setMessageReceived(data);
       }
     });
@@ -55,7 +55,7 @@ export default function Discussion() {
     if (!messageReceived) return;
     setConnected((prevState) =>
       prevState.map((connected) => {
-        return connected._id === messageReceived.sender._id
+        return connected.id === messageReceived.sender.id
           ? {
               ...connected,
               messages: [...connected.messages, messageReceived],
@@ -65,8 +65,6 @@ export default function Discussion() {
     );
     setOneUser((prevState) => prevState);
   }, [messageReceived]);
-
-  console.log(connected);
 
   // const deleteMessage = (id) => {
   //   axios.delete(`http://localhost:5000/api/discussions/${id}`).then((res) => {
@@ -79,7 +77,7 @@ export default function Discussion() {
   useEffect(() => {
     if (!oneUser) return;
     if (!connected) return;
-    setSelectUser(connected.find((user) => user._id === oneUser._id));
+    setSelectUser(connected.find((user) => user.id === oneUser.id));
   }, [oneUser, connected]);
 
   return (

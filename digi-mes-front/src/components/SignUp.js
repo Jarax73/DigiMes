@@ -1,8 +1,9 @@
-/* eslint-disable no-undef */
 import axios from "axios";
-import React from "react";
+import React, { useState } from "react";
 
 export default function SignUp() {
+  const [user, setUser] = useState({});
+  console.log(user);
   const createUser = (e) => {
     e.preventDefault();
     const user = {
@@ -17,11 +18,10 @@ export default function SignUp() {
       url: "http://localhost:5000/api/auth/register",
       data: user,
     })
-      .then(async (response) => {
+      .then((response) => {
         console.log(response);
-        if (response.data.success === true) {
-          window.location.href = "/";
-        }
+        if (response.data.success === true) window.location.href = "/";
+        setUser(response.data);
       })
       .catch((error) => error);
     e.target.reset();

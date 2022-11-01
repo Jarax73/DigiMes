@@ -36,7 +36,7 @@ export default function Discuss({ discuss, deleteMessage, message }) {
       <div
         className="discuss-border"
         onClick={handleMessage}
-        id={message.sender === user._id ? "me" : "other"}
+        id={message.sender.id === user.id ? "me" : "other"}
       >
         <p style={{ alignSelf: "flex-end" }}>{message.discussion}</p>
       </div>
