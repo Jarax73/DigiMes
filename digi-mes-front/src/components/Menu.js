@@ -20,7 +20,7 @@ export default function Menu() {
             <p>loading...</p>
           ) : (
             <p>
-              {user.firstName} {user.lastName}{" "}
+              {user.firstName} {user.lastName}
             </p>
           )}
         </div>

@@ -23,8 +23,6 @@ export default function UserConversation({ setShown }) {
       .then((response) => setFriend(response.data));
   }, [token]);
 
-  console.log(friends);
-
   return (
     <div className="users-discuss">
       {friends.length === 0 ? (

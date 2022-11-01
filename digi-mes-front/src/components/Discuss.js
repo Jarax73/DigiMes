@@ -1,20 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import PropTypes from "prop-types";
 import { AiFillDelete } from "react-icons/ai";
+import { AppContext } from "../App";
 
-export default function Discuss({
-  discuss,
-  deleteMessage,
-  messageContent,
-  user,
-}) {
+export default function Discuss({ discuss, deleteMessage, message }) {
   Discuss.propTypes = {
     discuss: PropTypes.object,
     deleteMessage: PropTypes.func,
-    messageContent: PropTypes.object,
+    message: PropTypes.object,
     user: PropTypes.object,
   };
   const [isShown, setIsShown] = useState(false);
+  const { user } = useContext(AppContext);
 
   const handleMessage = () => {
     setIsShown((current) => !current);
@@ -39,9 +36,9 @@ export default function Discuss({
       <div
         className="discuss-border"
         onClick={handleMessage}
-        id={messageContent.sender.id === user.id ? "me" : "other"}
+        id={message.sender.id === user.id ? "me" : "other"}
       >
-        <p style={{ alignSelf: "flex-end" }}>{messageContent.discussion}</p>
+        <p style={{ alignSelf: "flex-end" }}>{message.discussion}</p>
       </div>
     </>
   );

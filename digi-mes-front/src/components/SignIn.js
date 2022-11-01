@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import { AppContext } from "../App";
+import PropTypes from "prop-types";
 
-export default function SignIn() {
-  const { logUser } = useContext(AppContext);
+export default function SignIn({ logUser }) {
+  SignIn.propTypes = {
+    logUser: PropTypes.func,
+  };
 
   return (
     <div className="sign">

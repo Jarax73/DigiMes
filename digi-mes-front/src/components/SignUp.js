@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useState } from "react";
 
-export default function SignU() {
+export default function SignUp() {
   const [user, setUser] = useState({});
   console.log(user);
   const createUser = (e) => {
@@ -20,8 +20,7 @@ export default function SignU() {
     })
       .then((response) => {
         console.log(response);
-        if (response.data.success === true)
-          window.location.href = "http://localhost:3000/login";
+        if (response.data.success === true) window.location.href = "/";
         setUser(response.data);
       })
       .catch((error) => error);

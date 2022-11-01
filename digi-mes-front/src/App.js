@@ -1,11 +1,5 @@
 /* eslint-disable no-undef */
-import React, {
-  createContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import React, { createContext, useEffect, useRef, useState } from "react";
 import { Routes, Route } from "react-router-dom";
 import Jakaps from "./assets/jakaps.jpg";
 import Home from "./components/Home";
@@ -35,21 +29,17 @@ function App() {
   const [id, setId] = useState("");
   const [connected, setConnected] = useState([]);
   const [showFriends, setShowFriends] = useState(false);
-  const [messageReceived, setMessageReceived] = useState([]);
+  const [messageReceived, setMessageReceived] = useState(null);
 
   useEffect(() => {
     const storage = window.localStorage.getItem("token");
     setToken(storage);
     setUser(JSON.parse(window.localStorage.getItem("user")));
   }, []);
-  console.log(user);
+
   useEffect(() => {
-    socket.current.on("updated_list", (data) => {
-      console.log(data);
-      setConnected(data);
-    });
+    socket.current.on("updated_list", (data) => setConnected(data));
   }, []);
-  console.log(connected);
 
   const logUser = (e) => {
     e.preventDefault();
@@ -84,59 +74,33 @@ function App() {
     window.location.href = "/";
   };
 
-  const val = useMemo(
-    () => ({
-      token,
-      Jakaps,
-      discussion,
-      user,
-      logUser,
-      logout,
-      socket,
-      connected,
-      setConnected,
-      setDiscussion,
-      messageReceived,
-      setMessageReceived,
-      message,
-      setMessage,
-      friends,
-      showFriends,
-      setShowFriends,
-      setFriend,
-      oneUser,
-      setOneUser,
-      id,
-      setId,
-    }),
-    [
-      token,
-      Jakaps,
-      discussion,
-      user,
-      logUser,
-      logout,
-      socket,
-      connected,
-      setConnected,
-      setDiscussion,
-      messageReceived,
-      setMessageReceived,
-      message,
-      setMessage,
-      friends,
-      showFriends,
-      setShowFriends,
-      setFriend,
-      oneUser,
-      setOneUser,
-      id,
-      setId,
-    ]
-  );
-
   return (
-    <AppContext.Provider value={val}>
+    <AppContext.Provider
+      value={{
+        token,
+        Jakaps,
+        discussion,
+        user,
+
+        logout,
+        socket,
+        connected,
+        setConnected,
+        setDiscussion,
+        messageReceived,
+        setMessageReceived,
+        message,
+        setMessage,
+        friends,
+        showFriends,
+        setShowFriends,
+        setFriend,
+        oneUser,
+        setOneUser,
+        id,
+        setId,
+      }}
+    >
       <div className="container">
         {token === null ? (
           <div className="sign">
@@ -147,7 +111,7 @@ function App() {
               </div>
               <Routes>
                 <Route path="/" element={<Welcome />}>
-                  <Route path="/" element={<SignIn />} />
+                  <Route path="/" element={<SignIn logUser={logUser} />} />
                   <Route path="/signup" element={<SignUp />} />
                 </Route>
               </Routes>

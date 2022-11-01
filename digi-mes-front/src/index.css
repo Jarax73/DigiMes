@@ -192,7 +192,7 @@ code {
 .discuss-border{
     display: inline-block;
     word-wrap: break-word;
-    /* width: fit-content; */
+    width: fit-content;
     max-width: 45%;
     padding: 0 2%;
     margin: 10px 0;
