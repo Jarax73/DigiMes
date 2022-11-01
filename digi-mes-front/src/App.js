@@ -30,7 +30,7 @@ function App() {
   const [connected, setConnected] = useState([]);
   const [showFriends, setShowFriends] = useState(false);
   const [messageReceived, setMessageReceived] = useState(null);
-
+  console.log(connected);
   useEffect(() => {
     const storage = window.localStorage.getItem("token");
     setToken(storage);
@@ -81,7 +81,6 @@ function App() {
         Jakaps,
         discussion,
         user,
-
         logout,
         socket,
         connected,
