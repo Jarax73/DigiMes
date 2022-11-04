@@ -40,43 +40,36 @@ io.on("connection", (socket) => {
     // });
 
     socket.on("logged_in", (user) => {
-        console.log(user.id);
-        clientSocketIds.push({ socket: socket, userId: user.id });
-        connectedUsers = connectedUsers.filter((item) => item.id != user.id);
+        // console.log(user.id);
+        clientSocketIds.push({ socket: socket, userId: user._id });
+        connectedUsers = connectedUsers.filter((item) => item._id != user._id);
         connectedUsers.push({ ...user, socket: socket.id });
         io.emit("updated_list", connectedUsers);
     });
-    console.log(connectedUsers);
-    console.log(clientSocketIds);
 
-    console.log(`User connected: ${socket.id}`);
+    socket.on("update_user", (data) => {
+        console.log(data);
+    });
+
+    socket.on("private_message", (data) => {
+        const messages = new Message(data);
+        messages.save();
+        // console.log(data.socketTo);
+        socket.to(data.socketTo).emit("private_message", data);
+    });
+
+    // console.log(`User connected: ${socket.id}`);
 
     // Message.find().then((result) => {
     //     socket.emit("output_messages", result);
     // });
 
     socket.on("disconnect", () => {
-        console.log("User disconnected");
+        // console.log("User disconnected");
         connectedUsers = connectedUsers.filter(
             (item) => item.sockedId !== socket.id
         );
         io.emit("updated_list", connectedUsers);
-    });
-
-    socket.on("chat_message", (data) => {
-        // console.log(data);
-        const sendUserSocket = data.to;
-        console.log(data.sender);
-        const messages = new Message({ ...data.discussion });
-        if (sendUserSocket) {
-            messages
-                .save()
-                .then(() =>
-                    socket
-                        .to(sendUserSocket)
-                        .emit("message", data.sender.id, data.discussion)
-                );
-        }
     });
 });
 

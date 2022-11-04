@@ -7,28 +7,13 @@ const mongoose = require("mongoose");
 const discussionSchema = mongoose.Schema(
     {
         time: String,
-        discussion: {
-            // text: {
-            type: String,
-            // required: true,
-            // },
-        },
-        // users: Array,
+        discussion: { type: String },
         to: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-        sender: {
-            type: Map,
-            to: String,
-            // required: true
-        },
-        // sender: {
-        //     type: mongoose.Schema.Types.ObjectId,
-        //     ref: "User",
-        //     required: true,
-        // },
+        sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+    },
+    {
+        timestamps: true,
     }
-    // {
-    //     timestamps: true,
-    // }
 );
 
 module.exports = mongoose.model("Discussion", discussionSchema);
