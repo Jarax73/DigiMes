@@ -7,7 +7,7 @@ export default function UserConversation({ setShown }) {
     setShown: PropTypes.func,
   };
   const { Jakaps, setOneUser, setId, user, connected } = useContext(AppContext);
-
+  console.log(connected);
   return (
     <div className="users-discuss">
       <h2 style={{ margin: "3%" }}>Connected</h2>
@@ -16,14 +16,14 @@ export default function UserConversation({ setShown }) {
         <div style={{ margin: "5% 5%" }}>*** No users connected</div>
       ) : (
         connected.map((friend) => {
-          if (friend.id !== user.id) {
+          if (friend._id !== user._id) {
             return (
               <div
                 style={{ textDecoration: "none" }}
-                key={friend.id}
+                key={friend._id}
                 onClick={() => {
                   setShown(true);
-                  setId(friend.id);
+                  setId(friend._id);
                   setOneUser(friend);
                 }}
               >

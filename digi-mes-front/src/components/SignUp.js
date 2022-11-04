@@ -1,9 +1,7 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React from "react";
 
 export default function SignUp() {
-  const [user, setUser] = useState({});
-  console.log(user);
   const createUser = (e) => {
     e.preventDefault();
     const user = {
@@ -11,6 +9,8 @@ export default function SignUp() {
       lastName: e.target.last.value,
       email: e.target.mail.value,
       password: e.target.password.value,
+      imageUrl: "",
+      messages: [],
     };
 
     axios({
@@ -21,7 +21,7 @@ export default function SignUp() {
       .then((response) => {
         console.log(response);
         if (response.data.success === true) window.location.href = "/";
-        setUser(response.data);
+        else alert("Oups");
       })
       .catch((error) => error);
     e.target.reset();

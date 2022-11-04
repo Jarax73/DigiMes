@@ -19,7 +19,6 @@ function App() {
         : process.env.REACT_APP_DEV_API_URL
     )
   );
-
   const [user, setUser] = useState([]);
   const [discussion, setDiscussion] = useState([]);
   const [token, setToken] = useState("");
@@ -36,6 +35,7 @@ function App() {
     setToken(storage);
     setUser(JSON.parse(window.localStorage.getItem("user")));
   }, []);
+  console.log(user);
 
   useEffect(() => {
     socket.current.on("updated_list", (data) => setConnected(data));
@@ -43,7 +43,7 @@ function App() {
 
   const logUser = (e) => {
     e.preventDefault();
-    const user = {
+    const userLog = {
       email: e.target.mail.value,
       password: e.target.password.value,
     };
@@ -54,13 +54,10 @@ function App() {
         process.env.NODE_ENV === "production"
           ? `${process.env.REACT_APP_PROD_API_URL}api/auth/login`
           : `${process.env.REACT_APP_DEV_API_URL}api/auth/login`,
-      data: user,
+      data: userLog,
     })
       .then(async (response) => {
-        if (response.data.success === true) {
-          window.location.href = "/";
-        }
-
+        if (response.data.success === true) window.location.href = "/";
         window.localStorage.setItem("token", response.data.token.split(" ")[1]);
         window.localStorage.setItem("user", JSON.stringify(response.data.user));
       })
@@ -81,7 +78,6 @@ function App() {
         Jakaps,
         discussion,
         user,
-
         logout,
         socket,
         connected,

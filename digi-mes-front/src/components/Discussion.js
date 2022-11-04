@@ -20,6 +20,10 @@ export default function Discussion() {
     setOneUser,
   } = useContext(AppContext);
 
+  useEffect(() => {
+    socket.current.on("discussions", (result) => setMessageReceived(result));
+  }, []);
+
   const sendMessage = (e) => {
     e.preventDefault();
     const messageData = {
@@ -28,12 +32,12 @@ export default function Discussion() {
       to: id,
       socketTo: oneUser.socket,
       socket: socket.current.id,
-      sender: user,
+      sender: user._id,
     };
     socket.current.emit("private_message", messageData);
     setConnected((prevState) =>
       prevState.map((connected) => {
-        return connected.id === messageData.to
+        return connected._id === messageData.to
           ? {
               ...connected,
               messages: [...connected.messages, messageData],
@@ -51,11 +55,13 @@ export default function Discussion() {
     });
   }, [socket]);
 
+  console.log(messageReceived);
+
   useEffect(() => {
     if (!messageReceived) return;
     setConnected((prevState) =>
       prevState.map((connected) => {
-        return connected.id === messageReceived.sender.id
+        return connected._id === messageReceived.sender
           ? {
               ...connected,
               messages: [...connected.messages, messageReceived],
@@ -71,14 +77,18 @@ export default function Discussion() {
   //     res.data;
   //   });
   // };
-
+  console.log(connected);
   const [selectUser, setSelectUser] = useState(null);
+  useEffect(() => {
+    socket.current.emit("update_user", selectUser);
+  }, [selectUser]);
 
   useEffect(() => {
     if (!oneUser) return;
     if (!connected) return;
-    setSelectUser(connected.find((user) => user.id === oneUser.id));
+    setSelectUser(connected.find((user) => user._id === oneUser._id));
   }, [oneUser, connected]);
+  console.log(selectUser);
 
   return (
     <section className="discuss">
