@@ -1,8 +1,10 @@
 /* eslint-disable no-undef */
 import axios from "axios";
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../App";
 
 export default function SignUp() {
+  const { setSign } = useContext(AppContext);
   const createUser = (e) => {
     e.preventDefault();
     const user = {
@@ -10,6 +12,8 @@ export default function SignUp() {
       lastName: e.target.last.value,
       email: e.target.mail.value,
       password: e.target.password.value,
+      imageUrl: "",
+      messages: [],
     };
 
     axios({
@@ -19,9 +23,8 @@ export default function SignUp() {
     })
       .then(async (response) => {
         console.log(response);
-        if (response.data.success === true) {
-          window.location.href = "/";
-        }
+        if (response.data.success === true) window.location.href = "/";
+        else alert("Oups");
       })
       .catch((error) => error);
     e.target.reset();
@@ -42,6 +45,15 @@ export default function SignUp() {
           <button type="submit" className="sign-submit">
             Save
           </button>
+          <p className="signup-appeal">
+            Back to
+            <p
+              style={{ cursor: "pointer", color: "#1966FF", marginLeft: "2%" }}
+              onClick={() => setSign(false)}
+            >
+              Sign in
+            </p>
+          </p>
         </form>
       </div>
     </div>

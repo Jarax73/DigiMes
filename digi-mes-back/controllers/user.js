@@ -1,15 +1,15 @@
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/users");
-// const bcrypt = require("bcrypt");
 
 exports.signup = async (request, response) => {
     const user = new User({
         firstName: request.body.firstName,
         lastName: request.body.lastName,
         email: request.body.email,
-        password: await bcrypt.hashSync(request.body.password, 10),
         imageUrl: request.body.imageUrl,
+        messages: request.body.messages,
+        password: await bcrypt.hashSync(request.body.password, 10),
     });
 
     user.save()
@@ -17,12 +17,7 @@ exports.signup = async (request, response) => {
             response.send({
                 success: true,
                 message: "User created",
-                user: {
-                    id: user._id,
-                    email: user.email,
-                    password: user.password,
-                    imageUrl: user.imageUrl,
-                },
+                user,
             });
         })
         .catch((error) => {
@@ -41,7 +36,6 @@ exports.getUsers = (request, response) => {
 };
 
 exports.getUser = (request, response) => {
-    console.log(request.query.firstName);
     User.find({ firstName: request.query.firstName })
         .then((user) => response.status(200).json(user))
         .catch((error) => response.status(500).json({ error }));
@@ -55,7 +49,6 @@ exports.login = (request, response) => {
                 message: "Cannot find user",
             });
         }
-        // console.log(user);
 
         const valid = await bcrypt.compare(
             user.password,
@@ -78,12 +71,7 @@ exports.login = (request, response) => {
         return response.status(200).json({
             success: true,
             message: "Logged In successfully",
-            user: {
-                id: user._id,
-                firstName: user.firstName,
-                lastName: user.lastName,
-                email: user.email,
-            },
+            user,
             token: `Bearer ${token}`,
         });
     });

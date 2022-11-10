@@ -12,6 +12,7 @@ export default function Discussion() {
     id,
     socket,
     message,
+    messageLoad,
     setMessage,
     connected,
     messageReceived,
@@ -20,13 +21,41 @@ export default function Discussion() {
     setOneUser,
   } = useContext(AppContext);
 
+  useEffect(() => {
+    messageLoad.map((message) => {
+      console.log(message);
+      setConnected((prevState) =>
+        prevState.map((connected) => {
+          return connected._id === message.sender ||
+            connected._id === message.to
+            ? {
+                ...connected,
+                messages: [...connected.messages, message],
+              }
+            : // : connected._id === message.to
+              // ? {
+              //     ...connected,
+              //     messages: [...connected.messages, message],
+              //   }
+              connected;
+        })
+      );
+    });
+  }, []);
+
   const sendMessage = (e) => {
     e.preventDefault();
     const messageData = {
+      time:
+        new Date(Date.now()).toDateString() +
+        " " +
+        new Date(Date.now()).getHours() +
+        ":" +
+        new Date(Date.now()).getMinutes(),
       discussion: message,
       to: id,
-      // socketTo: oneUser.socket,
-      // socket: socket.current.id,
+      socketTo: oneUser.socket,
+      socket: socket.current.id,
       sender: user._id,
     };
     socket.current.emit("private_message", messageData);
@@ -42,20 +71,22 @@ export default function Discussion() {
     );
     setMessage("");
   };
+
   useEffect(() => {
     socket.current.on("private_message", (data) => {
-      console.log(data);
       if (data.to === user._id) {
         setMessageReceived(data);
       }
     });
-  }, [socket]);
+  }, []);
+
+  console.log(messageReceived);
 
   useEffect(() => {
     if (!messageReceived) return;
     setConnected((prevState) =>
       prevState.map((connected) => {
-        return connected._id === messageReceived.sender._id
+        return connected._id === messageReceived.sender
           ? {
               ...connected,
               messages: [...connected.messages, messageReceived],
@@ -73,14 +104,18 @@ export default function Discussion() {
   //     res.data;
   //   });
   // };
-
+  console.log(connected);
   const [selectUser, setSelectUser] = useState(null);
+  useEffect(() => {
+    socket.current.emit("update_user", selectUser);
+  }, [selectUser]);
 
   useEffect(() => {
     if (!oneUser) return;
     if (!connected) return;
     setSelectUser(connected.find((user) => user._id === oneUser._id));
   }, [oneUser, connected]);
+  console.log(selectUser);
 
   return (
     <section className="discuss">

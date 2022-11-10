@@ -1,11 +1,14 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useContext } from "react";
+// import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
+import { AppContext } from "../App";
 
 export default function SignIn({ logUser }) {
   SignIn.propTypes = {
     logUser: PropTypes.func,
   };
+
+  const { setSign } = useContext(AppContext);
 
   return (
     <div className="sign">
@@ -19,7 +22,13 @@ export default function SignIn({ logUser }) {
             Sign In
           </button>
           <p className="signup-appeal">
-            Don’t have an account ? <Link to="/signup">Sign up</Link>
+            Don’t have an account ?{" "}
+            <p
+              style={{ cursor: "pointer", color: "#1966FF", marginLeft: "2%" }}
+              onClick={() => setSign(true)}
+            >
+              Sign up
+            </p>
           </p>
         </form>
       </div>

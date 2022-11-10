@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import React, { createContext, useEffect, useRef, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+// import { Routes, Route } from "react-router-dom";
 import Jakaps from "./assets/jakaps.jpg";
 import Home from "./components/Home";
 import SignUp from "./components/SignUp";
@@ -8,7 +8,7 @@ import Menu from "./components/Menu";
 import axios from "axios";
 import SignIn from "./components/SignIn";
 import io from "socket.io-client";
-import Welcome from "./components/Welcome";
+// import Welcome from "./components/Welcome";
 
 export const AppContext = createContext();
 function App() {
@@ -19,7 +19,6 @@ function App() {
         : process.env.REACT_APP_DEV_API_URL
     )
   );
-
   const [user, setUser] = useState([]);
   const [discussion, setDiscussion] = useState([]);
   const [token, setToken] = useState("");
@@ -27,8 +26,10 @@ function App() {
   const [friends, setFriend] = useState([]);
   const [oneUser, setOneUser] = useState({});
   const [id, setId] = useState("");
+  const [sign, setSign] = useState(false);
   const [connected, setConnected] = useState([]);
   const [showFriends, setShowFriends] = useState(false);
+  const [messageLoad, setMessageLoad] = useState([]);
   const [messageReceived, setMessageReceived] = useState(null);
   console.log(connected);
   useEffect(() => {
@@ -36,14 +37,23 @@ function App() {
     setToken(storage);
     setUser(JSON.parse(window.localStorage.getItem("user")));
   }, []);
+  console.log(user);
 
   useEffect(() => {
     socket.current.on("updated_list", (data) => setConnected(data));
   }, []);
 
+  useEffect(() => {
+    socket.current.on("output_messages", (data) => {
+      setMessageLoad(data);
+    });
+  }, []);
+
+  console.log(messageLoad);
+
   const logUser = (e) => {
     e.preventDefault();
-    const user = {
+    const userLog = {
       email: e.target.mail.value,
       password: e.target.password.value,
     };
@@ -54,13 +64,10 @@ function App() {
         process.env.NODE_ENV === "production"
           ? `${process.env.REACT_APP_PROD_API_URL}api/auth/login`
           : `${process.env.REACT_APP_DEV_API_URL}api/auth/login`,
-      data: user,
+      data: userLog,
     })
       .then(async (response) => {
-        if (response.data.success === true) {
-          window.location.href = "/";
-        }
-
+        if (response.data.success === true) window.location.href = "/";
         window.localStorage.setItem("token", response.data.token.split(" ")[1]);
         window.localStorage.setItem("user", JSON.stringify(response.data.user));
       })
@@ -89,6 +96,7 @@ function App() {
         messageReceived,
         setMessageReceived,
         message,
+        messageLoad,
         setMessage,
         friends,
         showFriends,
@@ -98,6 +106,7 @@ function App() {
         setOneUser,
         id,
         setId,
+        setSign,
       }}
     >
       <div className="container">
@@ -108,12 +117,7 @@ function App() {
                 Bienvenue dans notre application de messagerie <br />
                 DigiMes
               </div>
-              <Routes>
-                <Route path="/" element={<Welcome />}>
-                  <Route path="/" element={<SignIn logUser={logUser} />} />
-                  <Route path="/signup" element={<SignUp />} />
-                </Route>
-              </Routes>
+              {sign === false ? <SignIn logUser={logUser} /> : <SignUp />}
             </div>
           </div>
         ) : (

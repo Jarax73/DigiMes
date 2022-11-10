@@ -46,6 +46,8 @@ code {
 }
 .signup-appeal{
     font-size: 80%;
+    display: flex;
+    align-items: center;
 }
 .signin{
     display: flex;
@@ -186,26 +188,35 @@ code {
     overflow-y: auto;
     scroll-behavior: smooth;
     width: 90%;
-    height: 100%;
-    margin: auto;
+    height: 58vh;
+    margin: 0 auto;
+    padding: 0;
 }
 .discuss-border{
     display: inline-block;
     word-wrap: break-word;
     width: fit-content;
-    max-width: 45%;
-    padding: 0 2%;
+    max-width: 50%;
+    padding: 0 5%;
     margin: 10px 0;
     border-radius: 15px;
 }
 #me{
     background-color: #1966FF;
     align-self: flex-end;
-    float: right;
+    /* float: right; */
 }
 #other{
     background-color: #eaeaea;
-    float: left;
+}
+.me{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    align-self: flex-end;
+}
+.other{
+    align-self: flex-start;
 }
 .send-message{
     padding: 0 0 5% 0;
