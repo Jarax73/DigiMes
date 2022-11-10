@@ -1,7 +1,9 @@
 import axios from "axios";
-import React from "react";
+import React, { useContext } from "react";
+import { AppContext } from "../App";
 
 export default function SignUp() {
+  const { setSign } = useContext(AppContext);
   const createUser = (e) => {
     e.preventDefault();
     const user = {
@@ -42,6 +44,15 @@ export default function SignUp() {
           <button type="submit" className="sign-submit">
             Save
           </button>
+          <p className="signup-appeal">
+            Back to
+            <p
+              style={{ cursor: "pointer", color: "#1966FF", marginLeft: "2%" }}
+              onClick={() => setSign(false)}
+            >
+              Sign in
+            </p>
+          </p>
         </form>
       </div>
     </div>

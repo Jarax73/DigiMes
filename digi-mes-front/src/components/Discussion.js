@@ -12,6 +12,7 @@ export default function Discussion() {
     id,
     socket,
     message,
+    messageLoad,
     setMessage,
     connected,
     messageReceived,
@@ -21,13 +22,36 @@ export default function Discussion() {
   } = useContext(AppContext);
 
   useEffect(() => {
-    socket.current.on("discussions", (result) => setMessageReceived(result));
+    messageLoad.map((message) => {
+      console.log(message);
+      setConnected((prevState) =>
+        prevState.map((connected) => {
+          return connected._id === message.sender ||
+            connected._id === message.to
+            ? {
+                ...connected,
+                messages: [...connected.messages, message],
+              }
+            : // : connected._id === message.to
+              // ? {
+              //     ...connected,
+              //     messages: [...connected.messages, message],
+              //   }
+              connected;
+        })
+      );
+    });
   }, []);
 
   const sendMessage = (e) => {
     e.preventDefault();
     const messageData = {
-      time: Date.now(),
+      time:
+        new Date(Date.now()).toDateString() +
+        " " +
+        new Date(Date.now()).getHours() +
+        ":" +
+        new Date(Date.now()).getMinutes(),
       discussion: message,
       to: id,
       socketTo: oneUser.socket,
@@ -47,13 +71,14 @@ export default function Discussion() {
     );
     setMessage("");
   };
+
   useEffect(() => {
     socket.current.on("private_message", (data) => {
-      if (data.socketTo === socket.current.id) {
+      if (data.to === user._id) {
         setMessageReceived(data);
       }
     });
-  }, [socket]);
+  }, []);
 
   console.log(messageReceived);
 

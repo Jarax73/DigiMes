@@ -1,6 +1,6 @@
 /* eslint-disable no-undef */
 import React, { createContext, useEffect, useRef, useState } from "react";
-import { Routes, Route } from "react-router-dom";
+// import { Routes, Route } from "react-router-dom";
 import Jakaps from "./assets/jakaps.jpg";
 import Home from "./components/Home";
 import SignUp from "./components/SignUp";
@@ -8,7 +8,7 @@ import Menu from "./components/Menu";
 import axios from "axios";
 import SignIn from "./components/SignIn";
 import io from "socket.io-client";
-import Welcome from "./components/Welcome";
+// import Welcome from "./components/Welcome";
 
 export const AppContext = createContext();
 function App() {
@@ -26,8 +26,10 @@ function App() {
   const [friends, setFriend] = useState([]);
   const [oneUser, setOneUser] = useState({});
   const [id, setId] = useState("");
+  const [sign, setSign] = useState(false);
   const [connected, setConnected] = useState([]);
   const [showFriends, setShowFriends] = useState(false);
+  const [messageLoad, setMessageLoad] = useState([]);
   const [messageReceived, setMessageReceived] = useState(null);
 
   useEffect(() => {
@@ -40,6 +42,14 @@ function App() {
   useEffect(() => {
     socket.current.on("updated_list", (data) => setConnected(data));
   }, []);
+
+  useEffect(() => {
+    socket.current.on("output_messages", (data) => {
+      setMessageLoad(data);
+    });
+  }, []);
+
+  console.log(messageLoad);
 
   const logUser = (e) => {
     e.preventDefault();
@@ -86,6 +96,7 @@ function App() {
         messageReceived,
         setMessageReceived,
         message,
+        messageLoad,
         setMessage,
         friends,
         showFriends,
@@ -95,6 +106,7 @@ function App() {
         setOneUser,
         id,
         setId,
+        setSign,
       }}
     >
       <div className="container">
@@ -105,12 +117,7 @@ function App() {
                 Bienvenue dans notre application de messagerie <br />
                 DigiMes
               </div>
-              <Routes>
-                <Route path="/" element={<Welcome />}>
-                  <Route path="/" element={<SignIn logUser={logUser} />} />
-                  <Route path="/signup" element={<SignUp />} />
-                </Route>
-              </Routes>
+              {sign === false ? <SignIn logUser={logUser} /> : <SignUp />}
             </div>
           </div>
         ) : (

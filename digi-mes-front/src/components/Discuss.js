@@ -31,7 +31,7 @@ export default function Discuss({ discuss, deleteMessage, message }) {
   );
 
   return (
-    <>
+    <div className={message.sender === user._id ? "me" : "other"}>
       {changeAndModify}
       <div
         className="discuss-border"
@@ -40,6 +40,7 @@ export default function Discuss({ discuss, deleteMessage, message }) {
       >
         <p style={{ alignSelf: "flex-end" }}>{message.discussion}</p>
       </div>
-    </>
+      <p style={{ marginTop: "-2%", fontSize: "14px" }}>{message.time}</p>
+    </div>
   );
 }
