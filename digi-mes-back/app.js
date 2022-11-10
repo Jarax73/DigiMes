@@ -39,16 +39,15 @@ io.on("connection", (socket) => {
     //     }
     // });
 
+    Message.find().then((result) => {
+        socket.emit("output_messages", result);
+    });
+
     socket.on("logged_in", (user) => {
-        // console.log(user.id);
         clientSocketIds.push({ socket: socket, userId: user._id });
         connectedUsers = connectedUsers.filter((item) => item._id != user._id);
         connectedUsers.push({ ...user, socket: socket.id });
         io.emit("updated_list", connectedUsers);
-    });
-
-    socket.on("update_user", (data) => {
-        console.log(data);
     });
 
     socket.on("private_message", (data) => {
@@ -59,10 +58,6 @@ io.on("connection", (socket) => {
     });
 
     // console.log(`User connected: ${socket.id}`);
-
-    // Message.find().then((result) => {
-    //     socket.emit("output_messages", result);
-    // });
 
     socket.on("disconnect", () => {
         // console.log("User disconnected");
