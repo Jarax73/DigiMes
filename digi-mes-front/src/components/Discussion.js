@@ -1,8 +1,11 @@
+/* eslint-disable no-undef */
 import React, { useContext, useEffect, useState } from "react";
 // import axios from "axios";
 import { AppContext } from "../App";
 import Discuss from "./Discuss";
 import WriteMessage from "./WriteMessage";
+import { css } from "@emotion/css";
+import ScrollToBottom from "react-scroll-to-bottom";
 
 export default function Discussion() {
   const {
@@ -20,6 +23,11 @@ export default function Discussion() {
     setConnected,
     setOneUser,
   } = useContext(AppContext);
+
+  const ROOT_CSS = css({
+    height: 600,
+    width: 400,
+  });
 
   useEffect(() => {
     messageLoad.map((message) => {
@@ -129,12 +137,12 @@ export default function Discussion() {
         </div>
       </header>
       <hr style={{ width: "90%" }} />
-      <div className="to-discuss">
+      <ScrollToBottom className="to-discuss" {...ROOT_CSS}>
         {selectUser &&
           selectUser.messages.map((message, index) => (
             <Discuss key={index} message={message} />
           ))}
-      </div>
+      </ScrollToBottom>
       <div className="send-message">
         <hr style={{ width: "90%", marginBottom: "20px" }} />
         <WriteMessage sendMessage={sendMessage} />

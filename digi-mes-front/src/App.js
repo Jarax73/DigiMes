@@ -8,6 +8,7 @@ import Menu from "./components/Menu";
 import axios from "axios";
 import SignIn from "./components/SignIn";
 import io from "socket.io-client";
+import Loader from "./components/Loader";
 // import Welcome from "./components/Welcome";
 
 export const AppContext = createContext();
@@ -19,6 +20,7 @@ function App() {
         : process.env.REACT_APP_DEV_API_URL
     )
   );
+  const [loader, setLoader] = useState(true);
   const [user, setUser] = useState([]);
   const [discussion, setDiscussion] = useState([]);
   const [token, setToken] = useState("");
@@ -32,6 +34,12 @@ function App() {
   const [messageLoad, setMessageLoad] = useState([]);
   const [messageReceived, setMessageReceived] = useState(null);
   console.log(connected);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setLoader(false);
+    }, 3000);
+  }, []);
   useEffect(() => {
     const storage = window.localStorage.getItem("token");
     setToken(storage);
@@ -48,9 +56,7 @@ function App() {
       setMessageLoad(data);
     });
   }, []);
-
   console.log(messageLoad);
-
   const logUser = (e) => {
     e.preventDefault();
     const userLog = {
@@ -74,14 +80,15 @@ function App() {
       .catch((error) => error);
     e.target.reset();
   };
-
   const logout = () => {
     window.localStorage.removeItem("token");
     window.localStorage.removeItem("user");
     window.location.href = "/";
   };
 
-  return (
+  return loader ? (
+    <Loader />
+  ) : (
     <AppContext.Provider
       value={{
         token,
