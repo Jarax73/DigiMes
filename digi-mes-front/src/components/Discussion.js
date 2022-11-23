@@ -1,11 +1,11 @@
 /* eslint-disable no-undef */
 import React, { useContext, useEffect, useState } from "react";
 // import axios from "axios";
-import { AppContext } from "../App";
 import Discuss from "./Discuss";
 import WriteMessage from "./WriteMessage";
 import { css } from "@emotion/css";
 import ScrollToBottom from "react-scroll-to-bottom";
+import { AppContext } from "../context/AppContext";
 
 export default function Discussion() {
   const {
@@ -31,7 +31,6 @@ export default function Discussion() {
 
   useEffect(() => {
     messageLoad.map((message) => {
-      console.log(message);
       setConnected((prevState) =>
         prevState.map((connected) => {
           return connected._id === message.sender ||
@@ -40,12 +39,7 @@ export default function Discussion() {
                 ...connected,
                 messages: [...connected.messages, message],
               }
-            : // : connected._id === message.to
-              // ? {
-              //     ...connected,
-              //     messages: [...connected.messages, message],
-              //   }
-              connected;
+            : connected;
         })
       );
     });
@@ -88,8 +82,6 @@ export default function Discussion() {
     });
   }, []);
 
-  console.log(messageReceived);
-
   useEffect(() => {
     if (!messageReceived) return;
     setConnected((prevState) =>
@@ -105,14 +97,11 @@ export default function Discussion() {
     setOneUser((prevState) => prevState);
   }, [messageReceived]);
 
-  console.log(connected);
-
   // const deleteMessage = (id) => {
   //   axios.delete(`http://localhost:5000/api/discussions/${id}`).then((res) => {
   //     res.data;
   //   });
   // };
-  console.log(connected);
   const [selectUser, setSelectUser] = useState(null);
   useEffect(() => {
     socket.current.emit("update_user", selectUser);
@@ -123,7 +112,6 @@ export default function Discussion() {
     if (!connected) return;
     setSelectUser(connected.find((user) => user._id === oneUser._id));
   }, [oneUser, connected]);
-  console.log(selectUser);
 
   return (
     <section className="discuss">

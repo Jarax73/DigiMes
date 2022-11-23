@@ -1,14 +1,11 @@
+/* eslint-disable react/prop-types */
 import React from "react";
-import PropTypes from "prop-types";
 import UserConversation from "./UserConversation";
 import ConnectedUsers from "./ConnectedUsers";
 import { useContext } from "react";
-import { AppContext } from "../App";
+import { AppContext } from "../context/AppContext";
 
 export default function Friends({ setShown }) {
-  Friends.propTypes = {
-    setShown: PropTypes.func,
-  };
   const { showFriends } = useContext(AppContext);
   return (
     <>

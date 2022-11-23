@@ -1,30 +1,28 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
+import React from "react";
 import axios from "axios";
-import React, { useContext } from "react";
-import { AppContext } from "../App";
 
-export default function SignUp() {
-  const { setSign } = useContext(AppContext);
-  const createUser = (e) => {
+export default function SignIn({ setSign }) {
+  const logUser = (e) => {
     e.preventDefault();
-    const user = {
-      firstName: e.target.first.value,
-      lastName: e.target.last.value,
+    const userLog = {
       email: e.target.mail.value,
       password: e.target.password.value,
-      imageUrl: "",
-      messages: [],
     };
 
     axios({
       method: "POST",
-      url: "http://localhost:5000/api/auth/register",
-      data: user,
+      url:
+        process.env.NODE_ENV === "production"
+          ? `${process.env.REACT_APP_PROD_API_URL}api/auth/login`
+          : `${process.env.REACT_APP_DEV_API_URL}api/auth/login`,
+      data: userLog,
     })
       .then(async (response) => {
-        console.log(response);
         if (response.data.success === true) window.location.href = "/";
-        else alert("Oups");
+        window.localStorage.setItem("token", response.data.token.split(" ")[1]);
+        window.localStorage.setItem("user", JSON.stringify(response.data.user));
       })
       .catch((error) => error);
     e.target.reset();
@@ -33,25 +31,21 @@ export default function SignUp() {
   return (
     <div className="sign">
       <div className="welcome">
-        <form className="signin" onSubmit={createUser}>
-          <label htmlFor="first">First-Name</label>
-          <input type="text" id="first" name="first" />
-          <label htmlFor="last">Last-Name</label>
-          <input type="text" id="last" name="last" />
+        <form className="signin" onSubmit={logUser}>
           <label htmlFor="mail">E-mail</label>
           <input type="email" id="mail" name="mail" />
           <label htmlFor="password">Password</label>
           <input type="password" id="password" name="password" />
           <button type="submit" className="sign-submit">
-            Save
+            Sign In
           </button>
           <p className="signup-appeal">
-            Back to
+            Don’t have an account ?{" "}
             <p
               style={{ cursor: "pointer", color: "#1966FF", marginLeft: "2%" }}
-              onClick={() => setSign(false)}
+              onClick={() => setSign(true)}
             >
-              Sign in
+              Sign up
             </p>
           </p>
         </form>

@@ -201,6 +201,7 @@ code {
     border-radius: 15px;
 }
 #me{
+    color: #fff;
     background-color: #1966FF;
     align-self: flex-end;
     /* float: right; */

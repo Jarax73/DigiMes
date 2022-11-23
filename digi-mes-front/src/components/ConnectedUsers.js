@@ -1,13 +1,10 @@
-import PropTypes from "prop-types";
+/* eslint-disable react/prop-types */
 import React, { useContext } from "react";
-import { AppContext } from "../App";
+import { AppContext } from "../context/AppContext";
 
 export default function UserConversation({ setShown }) {
-  UserConversation.propTypes = {
-    setShown: PropTypes.func,
-  };
   const { Jakaps, setOneUser, setId, user, connected } = useContext(AppContext);
-  console.log(connected);
+
   return (
     <div className="users-discuss">
       <h2 style={{ margin: "3%" }}>Connected</h2>

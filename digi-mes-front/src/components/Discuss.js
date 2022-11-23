@@ -1,15 +1,9 @@
+/* eslint-disable react/prop-types */
 import React, { useContext, useState } from "react";
-import PropTypes from "prop-types";
 import { AiFillDelete } from "react-icons/ai";
-import { AppContext } from "../App";
+import { AppContext } from "../context/AppContext";
 
 export default function Discuss({ discuss, deleteMessage, message }) {
-  Discuss.propTypes = {
-    discuss: PropTypes.object,
-    deleteMessage: PropTypes.func,
-    message: PropTypes.object,
-    user: PropTypes.object,
-  };
   const [isShown, setIsShown] = useState(false);
   const { user } = useContext(AppContext);
 

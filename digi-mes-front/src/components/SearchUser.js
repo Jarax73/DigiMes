@@ -1,8 +1,9 @@
+/* eslint-disable no-undef */
 import React, { useContext, useState } from "react";
 import { RiSearchLine } from "react-icons/ri";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import axios from "axios";
-import { AppContext } from "../App";
+import { AppContext } from "../context/AppContext";
 
 export default function SearchUser() {
   const { token, setUserToChat } = useContext(AppContext);
@@ -11,22 +12,26 @@ export default function SearchUser() {
   const searchuser = (e) => {
     e.preventDefault();
     axios
-      .get("http://localhost:5000/api/users", {
-        headers: {
-          Accept: "application/json",
-          "Content-type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        params: {
-          firstName: keySearch,
-        },
-      })
+      .get(
+        process.env.NODE_ENV === "production"
+          ? `${process.env.REACT_APP_PROD_API_URL}api/users`
+          : `${process.env.REACT_APP_DEV_API_URL}api/users`,
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          params: {
+            firstName: keySearch,
+          },
+        }
+      )
       .then((response) => setUserToChat(response.data));
     e.target.reset();
   };
 
   return (
-    // <>
     <div style={{ display: "flex", flexDirection: "column" }}>
       <div
         style={{
@@ -52,6 +57,5 @@ export default function SearchUser() {
         </form>
       </div>
     </div>
-    // </>
   );
 }

@@ -2,14 +2,14 @@ import React, { useContext, useEffect } from "react";
 import { BsChatDotsFill } from "react-icons/bs";
 import { TbLogout } from "react-icons/tb";
 import { RiContactsFill } from "react-icons/ri";
-import { AppContext } from "../App";
+import { AppContext } from "../context/AppContext";
 
 export default function Menu() {
   const { Jakaps, user, socket, logout, setShowFriends } =
     useContext(AppContext);
+
   useEffect(() => {
-    if (user.length === 0) return;
-    socket.current.emit("logged_in", user);
+    !user ? null : socket.current.emit("logged_in", user);
   }, [user]);
   return (
     <nav className="menu">
