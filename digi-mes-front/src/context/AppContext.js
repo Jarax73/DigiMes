@@ -3,7 +3,7 @@
 import React, { createContext, useEffect, useRef, useState } from "react";
 import ProfilePicture from "../assets/defaultPicture.jpg";
 import io from "socket.io-client";
-import { apiUrl } from "../address/ApiAddress";
+import { apiUrl } from "../address/UrlAddress";
 
 export const AppContext = createContext();
 

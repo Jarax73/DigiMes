@@ -272,3 +272,18 @@ code {
     text-align: center;
     margin: 0 auto;
 }
+
+.change-image-container{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.change-user-avatar{
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 5%;
+}

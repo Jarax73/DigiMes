@@ -19,5 +19,12 @@ export const usersUrl =
     ? `${process.env.REACT_APP_PROD_API_URL}api/users`
     : `${process.env.REACT_APP_DEV_API_URL}api/users`;
 
-export const setUserToLocalStorage = (user) =>
+export const updateUser =
+  process.env.NODE_ENV === "production"
+    ? `${process.env.REACT_APP_PROD_API_URL}api/auth/user/update`
+    : `${process.env.REACT_APP_DEV_API_URL}api/auth/user/update`;
+
+export const setUserToLocalStorage = (user) => {
   window.localStorage.setItem("user", JSON.stringify(user));
+  window.location.href = "/";
+};

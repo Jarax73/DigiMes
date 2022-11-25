@@ -2,7 +2,7 @@
 /* eslint-disable react/prop-types */
 import axios from "axios";
 import React, { useContext, useEffect } from "react";
-import { usersUrl } from "../address/ApiAddress";
+import { usersUrl } from "../address/UrlAddress";
 import { AppContext } from "../context/AppContext";
 
 export default function UserConversation({ setShown }) {

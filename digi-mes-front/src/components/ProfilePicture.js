@@ -1,6 +1,7 @@
+/* eslint-disable no-undef */
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
-import { setUserToLocalStorage } from "../address/ApiAddress";
+import { setUserToLocalStorage, updateUser } from "../address/UrlAddress";
 import { AppContext } from "../context/AppContext";
 
 export default function ProfilPicture() {
@@ -11,25 +12,23 @@ export default function ProfilPicture() {
   useEffect(() => {
     if (user.imageUrl === "") return;
     axios
-      .put(`http://localhost:5000/api/auth/user/update/${user._id}`, {
+      .put(`${updateUser}/${user._id}`, {
         imageUrl: user.imageUrl,
       })
       .then((response) => {
-        if (response.status === 200) setUserToLocalStorage(user);
+        if (response.status === 200 && success == 200)
+          setUserToLocalStorage(user);
       })
       .catch((error) => console.log(error));
   }, [success]);
-  console.log(user.imageUrl);
-  console.log(user);
-  //   console.log(imageUrl);
 
   const uploadImage = () => {
     const formData = new FormData();
     formData.append("file", profilePicture);
-    formData.append("upload_preset", "r6gfn2yt");
+    formData.append("upload_preset", process.env.REACT_APP_UPLOAD_PRESET);
 
     axios
-      .post("https://api.cloudinary.com/v1_1/dxpjmkij5/image/upload", formData)
+      .post(process.env.REACT_APP_CLOUDINARY_URL, formData)
       .then((response) => {
         if (response.status === 200) {
           setSuccess(response.status);
@@ -41,14 +40,15 @@ export default function ProfilPicture() {
   return (
     <div
       style={{
+        width: "100%",
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
       }}
     >
-      <div className="image-user">
+      <div className="change-image-container">
         <img
-          className="user-avatar"
+          className="change-user-avatar"
           src={user.imageUrl === "" ? ProfilePicture : user.imageUrl}
           alt="user"
         />
@@ -57,7 +57,7 @@ export default function ProfilPicture() {
         type="file"
         onChange={(e) => setProfilePicture(e.target.files[0])}
       />
-      <button onClick={uploadImage}>Send</button>
+      <button onClick={(e) => uploadImage(e)}>Save</button>
     </div>
   );
 }

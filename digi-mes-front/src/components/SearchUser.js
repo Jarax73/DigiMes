@@ -4,7 +4,7 @@ import { RiSearchLine } from "react-icons/ri";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
-import { usersUrl } from "../address/ApiAddress";
+import { usersUrl } from "../address/UrlAddress";
 
 export default function SearchUser() {
   const { token, setUserToChat } = useContext(AppContext);

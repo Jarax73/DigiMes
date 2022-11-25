@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 import React from "react";
 import axios from "axios";
-import { loginUrl, setUserToLocalStorage } from "../../address/ApiAddress";
+import { loginUrl, setUserToLocalStorage } from "../../address/UrlAddress";
 
 export default function SignIn({ setSign }) {
   const logUser = (e) => {
@@ -38,7 +38,7 @@ export default function SignIn({ setSign }) {
             Sign In
           </button>
           <p className="signup-appeal">
-            Don’t have an account ?{" "}
+            Don’t have an account ?
             <p
               style={{ cursor: "pointer", color: "#1966FF", marginLeft: "2%" }}
               onClick={() => setSign(true)}

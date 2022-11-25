@@ -2,7 +2,7 @@
 /* eslint-disable no-undef */
 import axios from "axios";
 import React from "react";
-import { logupUrl } from "../../address/ApiAddress";
+import { logupUrl } from "../../address/UrlAddress";
 
 export default function SignUp({ setSign }) {
   const createUser = (e) => {
