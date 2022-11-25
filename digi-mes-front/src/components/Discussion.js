@@ -9,7 +9,7 @@ import { AppContext } from "../context/AppContext";
 
 export default function Discussion() {
   const {
-    Jakaps,
+    ProfilePicture,
     oneUser,
     user,
     id,
@@ -117,7 +117,11 @@ export default function Discussion() {
     <section className="discuss">
       <header className="discuss-head">
         <div className="conversation-img">
-          <img className="user-avatar" src={Jakaps} alt="user" />
+          <img
+            className="user-avatar"
+            src={oneUser.imageUrl === "" ? ProfilePicture : oneUser.imageUrl}
+            alt="user"
+          />
         </div>
         <div className="info-conversation">
           <h3>{oneUser.firstName}</h3>

@@ -1,19 +1,14 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
 import React, { createContext, useEffect, useRef, useState } from "react";
-import Jakaps from "../assets/jakaps.jpg";
+import ProfilePicture from "../assets/defaultPicture.jpg";
 import io from "socket.io-client";
+import { apiUrl } from "../address/ApiAddress";
 
 export const AppContext = createContext();
 
 export default function AppProvider({ children }) {
-  const socket = useRef(
-    io(
-      process.env.NODE_ENV === "production"
-        ? process.env.REACT_APP_PROD_API_URL
-        : process.env.REACT_APP_DEV_API_URL
-    )
-  );
+  const socket = useRef(io(apiUrl));
 
   const [user, setUser] = useState([]);
   const [discussion, setDiscussion] = useState([]);
@@ -26,6 +21,9 @@ export default function AppProvider({ children }) {
   const [showFriends, setShowFriends] = useState(false);
   const [messageLoad, setMessageLoad] = useState([]);
   const [messageReceived, setMessageReceived] = useState(null);
+  const [userInfo, setUserInfo] = useState(false);
+  const [profilePicture, setProfilePicture] = useState("");
+
   useEffect(() => {
     const storage = window.localStorage.getItem("token");
     setToken(storage);
@@ -52,7 +50,7 @@ export default function AppProvider({ children }) {
     <AppContext.Provider
       value={{
         token,
-        Jakaps,
+        ProfilePicture,
         discussion,
         user,
         logout,
@@ -73,6 +71,10 @@ export default function AppProvider({ children }) {
         setOneUser,
         id,
         setId,
+        userInfo,
+        setUserInfo,
+        profilePicture,
+        setProfilePicture,
       }}
     >
       {children}

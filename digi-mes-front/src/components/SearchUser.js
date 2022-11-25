@@ -4,6 +4,7 @@ import { RiSearchLine } from "react-icons/ri";
 import { BiDotsVerticalRounded } from "react-icons/bi";
 import axios from "axios";
 import { AppContext } from "../context/AppContext";
+import { usersUrl } from "../address/ApiAddress";
 
 export default function SearchUser() {
   const { token, setUserToChat } = useContext(AppContext);
@@ -12,21 +13,16 @@ export default function SearchUser() {
   const searchuser = (e) => {
     e.preventDefault();
     axios
-      .get(
-        process.env.NODE_ENV === "production"
-          ? `${process.env.REACT_APP_PROD_API_URL}api/users`
-          : `${process.env.REACT_APP_DEV_API_URL}api/users`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          params: {
-            firstName: keySearch,
-          },
-        }
-      )
+      .get(usersUrl, {
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        params: {
+          firstName: keySearch,
+        },
+      })
       .then((response) => setUserToChat(response.data));
     e.target.reset();
   };

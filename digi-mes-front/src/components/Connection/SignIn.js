@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 import React from "react";
 import axios from "axios";
+import { loginUrl, setUserToLocalStorage } from "../../address/ApiAddress";
 
 export default function SignIn({ setSign }) {
   const logUser = (e) => {
@@ -13,16 +14,13 @@ export default function SignIn({ setSign }) {
 
     axios({
       method: "POST",
-      url:
-        process.env.NODE_ENV === "production"
-          ? `${process.env.REACT_APP_PROD_API_URL}api/auth/login`
-          : `${process.env.REACT_APP_DEV_API_URL}api/auth/login`,
+      url: loginUrl,
       data: userLog,
     })
       .then(async (response) => {
         if (response.data.success === true) window.location.href = "/";
         window.localStorage.setItem("token", response.data.token.split(" ")[1]);
-        window.localStorage.setItem("user", JSON.stringify(response.data.user));
+        setUserToLocalStorage(response.data.user);
       })
       .catch((error) => error);
     e.target.reset();

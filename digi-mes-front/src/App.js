@@ -6,7 +6,7 @@ import { AppContext } from "./context/AppContext";
 import Loader from "./components/Loader";
 import Connection from "./components/Connection";
 
-function App() {
+export default function App() {
   const [loader, setLoader] = useState(true);
   const { token } = useContext(AppContext);
 
@@ -31,5 +31,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

@@ -2,6 +2,7 @@
 /* eslint-disable no-undef */
 import axios from "axios";
 import React from "react";
+import { logupUrl } from "../../address/ApiAddress";
 
 export default function SignUp({ setSign }) {
   const createUser = (e) => {
@@ -17,10 +18,7 @@ export default function SignUp({ setSign }) {
 
     axios({
       method: "POST",
-      url:
-        process.env.NODE_ENV === "production"
-          ? `${process.env.REACT_APP_PROD_API_URL}api/auth/register`
-          : `${process.env.REACT_APP_DEV_API_URL}api/auth/register`,
+      url: logupUrl,
       data: user,
     })
       .then(async (response) => {

@@ -5,7 +5,7 @@ export default function Loader() {
   return (
     <div
       style={{
-        height: "100vh",
+        height: "95vh",
         width: "100%",
         display: "flex",
         justifyContent: "center",

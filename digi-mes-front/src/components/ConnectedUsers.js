@@ -3,7 +3,9 @@ import React, { useContext } from "react";
 import { AppContext } from "../context/AppContext";
 
 export default function UserConversation({ setShown }) {
-  const { Jakaps, setOneUser, setId, user, connected } = useContext(AppContext);
+  const { ProfilePicture, setOneUser, setId, user, connected, setUserInfo } =
+    useContext(AppContext);
+  console.log(connected);
 
   return (
     <div className="users-discuss">
@@ -22,11 +24,20 @@ export default function UserConversation({ setShown }) {
                   setShown(true);
                   setId(friend._id);
                   setOneUser(friend);
+                  setUserInfo(false);
                 }}
               >
                 <div className="conversation">
                   <div className="conversation-img">
-                    <img className="user-avatar" src={Jakaps} alt="user" />
+                    <img
+                      className="user-avatar"
+                      src={
+                        friend.imageUrl === ""
+                          ? ProfilePicture
+                          : friend.imageUrl
+                      }
+                      alt="user"
+                    />
                   </div>
                   <div className="info-conversation">
                     <h3>

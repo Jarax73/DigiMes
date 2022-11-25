@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useContext, useEffect } from "react";
 import { BsChatDotsFill } from "react-icons/bs";
 import { TbLogout } from "react-icons/tb";
@@ -5,16 +6,31 @@ import { RiContactsFill } from "react-icons/ri";
 import { AppContext } from "../context/AppContext";
 
 export default function Menu() {
-  const { Jakaps, user, socket, logout, setShowFriends } =
-    useContext(AppContext);
+  const {
+    ProfilePicture,
+    user,
+    socket,
+    setUserInfo,
+    logout,
+    setShowFriends,
+    profilePicture,
+  } = useContext(AppContext);
 
   useEffect(() => {
     !user ? null : socket.current.emit("logged_in", user);
   }, [user]);
+
+  console.log(profilePicture);
+
   return (
     <nav className="menu">
       <div className="image-user">
-        <img className="user-avatar" src={Jakaps} alt="user" />
+        <img
+          className="user-avatar"
+          src={user.imageUrl === "" ? ProfilePicture : user.imageUrl}
+          alt="user"
+          onClick={() => setUserInfo(true)}
+        />
         <div style={{ textAlign: "center" }}>
           {!user ? (
             <p>loading...</p>

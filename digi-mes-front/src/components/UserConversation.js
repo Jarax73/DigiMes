@@ -2,29 +2,34 @@
 /* eslint-disable react/prop-types */
 import axios from "axios";
 import React, { useContext, useEffect } from "react";
+import { usersUrl } from "../address/ApiAddress";
 import { AppContext } from "../context/AppContext";
 
 export default function UserConversation({ setShown }) {
-  const { Jakaps, token, friends, setFriend, setOneUser, setId } =
-    useContext(AppContext);
-
+  const {
+    ProfilePicture,
+    token,
+    friends,
+    setFriend,
+    connected,
+    setOneUser,
+    setId,
+    setUserInfo,
+  } = useContext(AppContext);
+  console.log(friends);
+  console.log(connected);
   useEffect(() => {
     if (!token) return;
     axios
-      .get(
-        process.env.NODE_ENV === "production"
-          ? `${process.env.REACT_APP_PROD_API_URL}api/users`
-          : `${process.env.REACT_APP_DEV_API_URL}api/users`,
-        {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      )
+      .get(usersUrl, {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      })
       .then((response) => setFriend(response.data));
-  }, [token]);
+  }, []);
 
   return (
     <div className="users-discuss">
@@ -40,11 +45,18 @@ export default function UserConversation({ setShown }) {
                 setShown(true);
                 setId(friend._id);
                 setOneUser(friend);
+                setUserInfo(false);
               }}
             >
               <div className="conversation">
                 <div className="conversation-img">
-                  <img className="user-avatar" src={Jakaps} alt="user" />
+                  <img
+                    className="user-avatar"
+                    src={
+                      friend.imageUrl === "" ? ProfilePicture : friend.imageUrl
+                    }
+                    alt="user"
+                  />
                 </div>
                 <div className="info-conversation">
                   <h3>
