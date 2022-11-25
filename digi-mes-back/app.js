@@ -8,7 +8,7 @@ const dotenv = require("dotenv");
 const passport = require("passport");
 const Message = require("./models/discussion");
 dotenv.config();
-// const User = require("./models/users");
+
 const userRoutes = require("./routes/users");
 const discussionsRoutes = require("./routes/discussion");
 const cors = require("cors");
@@ -30,15 +30,6 @@ let clientSocketIds = [];
 let connectedUsers = [];
 
 io.on("connection", (socket) => {
-    // socket.on("send_message", (data) => {
-    //     console.log(data);
-    //     if (sendUserSocket) {
-    //         Message.find().then((result) => {
-    //             socket.to(sendUserSocket).emit("msg_received", result);
-    //         });
-    //     }
-    // });
-
     Message.find().then((result) => {
         socket.emit("output_messages", result);
     });
@@ -53,16 +44,12 @@ io.on("connection", (socket) => {
     socket.on("private_message", (data) => {
         const messages = new Message(data);
         messages.save();
-        // console.log(data.socketTo);
         socket.to(data.socketTo).emit("private_message", data);
     });
 
-    // console.log(`User connected: ${socket.id}`);
-
     socket.on("disconnect", () => {
-        // console.log("User disconnected");
         connectedUsers = connectedUsers.filter(
-            (item) => item.sockedId !== socket.id
+            (item) => item.socket !== socket.id
         );
         io.emit("updated_list", connectedUsers);
     });
@@ -92,7 +79,6 @@ app.use((request, response, next) => {
     next();
 });
 
-// app.use("/api/user", todiscuss);
 app.use("/api/", userRoutes);
 app.use("/api/discussions", discussionsRoutes);
 

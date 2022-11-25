@@ -41,6 +41,17 @@ exports.getUser = (request, response) => {
         .catch((error) => response.status(500).json({ error }));
 };
 
+exports.updateUser = (request, response) => {
+    User.updateOne(
+        { _id: request.params.id },
+        { ...request.body, _id: request.params.id }
+    )
+        .then(() => {
+            response.status(200).json({ message: "user Updated" });
+        })
+        .catch((error) => response.status(401).json({ error }));
+};
+
 exports.login = (request, response) => {
     User.findOne({ email: request.body.email }).then(async (user) => {
         if (!user) {

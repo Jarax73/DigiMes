@@ -9,6 +9,7 @@ const auth = passport.authenticate("jwt", { session: false });
 router.post("/auth/register", userCtrl.signup);
 router.post("/auth/login", userCtrl.login);
 router.delete("/:id", userCtrl.deleteUser);
+router.put("/auth/user/update/:id", userCtrl.updateUser);
 router.get("/users", auth, userCtrl.getUsers);
 router.get("/auth", auth, userMiddleware);
 
