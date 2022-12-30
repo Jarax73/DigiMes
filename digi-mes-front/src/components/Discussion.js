@@ -1,5 +1,6 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-undef */
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext } from "react";
 // import axios from "axios";
 import Discuss from "./Discuss";
 import WriteMessage from "./WriteMessage";
@@ -7,111 +8,13 @@ import { css } from "@emotion/css";
 import ScrollToBottom from "react-scroll-to-bottom";
 import { AppContext } from "../context/AppContext";
 
-export default function Discussion() {
-  const {
-    ProfilePicture,
-    oneUser,
-    user,
-    id,
-    socket,
-    message,
-    messageLoad,
-    setMessage,
-    connected,
-    messageReceived,
-    setMessageReceived,
-    setConnected,
-    setOneUser,
-  } = useContext(AppContext);
+export default function Discussion({ sendMessage, selectUser }) {
+  const { ProfilePicture, oneUser } = useContext(AppContext);
 
   const ROOT_CSS = css({
     height: 600,
     width: 400,
   });
-
-  useEffect(() => {
-    messageLoad.map((message) => {
-      setConnected((prevState) =>
-        prevState.map((connected) => {
-          return connected._id === message.sender ||
-            connected._id === message.to
-            ? {
-                ...connected,
-                messages: [...connected.messages, message],
-              }
-            : connected;
-        })
-      );
-    });
-  }, []);
-
-  const sendMessage = (e) => {
-    e.preventDefault();
-    const messageData = {
-      time:
-        new Date(Date.now()).toDateString() +
-        " " +
-        new Date(Date.now()).getHours() +
-        ":" +
-        new Date(Date.now()).getMinutes(),
-      discussion: message,
-      to: id,
-      socketTo: oneUser.socket,
-      socket: socket.current.id,
-      sender: user._id,
-    };
-    socket.current.emit("private_message", messageData);
-    setConnected((prevState) =>
-      prevState.map((connected) => {
-        return connected._id === messageData.to
-          ? {
-              ...connected,
-              messages: [...connected.messages, messageData],
-            }
-          : connected;
-      })
-    );
-    setMessage("");
-  };
-
-  useEffect(() => {
-    socket.current.on("private_message", (data) => {
-      if (data.to === user._id) {
-        setMessageReceived(data);
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    if (!messageReceived) return;
-    setConnected((prevState) =>
-      prevState.map((connected) => {
-        return connected._id === messageReceived.sender
-          ? {
-              ...connected,
-              messages: [...connected.messages, messageReceived],
-            }
-          : connected;
-      })
-    );
-    setOneUser((prevState) => prevState);
-  }, [messageReceived]);
-
-  // const deleteMessage = (id) => {
-  //   axios.delete(`http://localhost:5000/api/discussions/${id}`).then((res) => {
-  //     res.data;
-  //   });
-  // };
-  const [selectUser, setSelectUser] = useState(null);
-  useEffect(() => {
-    socket.current.emit("update_user", selectUser);
-  }, [selectUser]);
-
-  useEffect(() => {
-    if (!oneUser) return;
-    if (!connected) return;
-    setSelectUser(connected.find((user) => user._id === oneUser._id));
-  }, [oneUser, connected]);
 
   return (
     <section className="discuss">
