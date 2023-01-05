@@ -6,21 +6,12 @@ import { RiContactsFill } from "react-icons/ri";
 import { AppContext } from "../context/AppContext";
 
 export default function Menu() {
-  const {
-    ProfilePicture,
-    user,
-    socket,
-    setUserInfo,
-    logout,
-    setShowFriends,
-    profilePicture,
-  } = useContext(AppContext);
+  const { ProfilePicture, user, socket, setUserInfo, logout, setShowFriends } =
+    useContext(AppContext);
 
   useEffect(() => {
     !user ? null : socket.current.emit("logged_in", user);
   }, [user]);
-
-  console.log(profilePicture);
 
   return (
     <nav className="menu">

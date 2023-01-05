@@ -16,6 +16,7 @@ export default function WriteMessage({ sendMessage }) {
         onChange={(e) => {
           setMessage(e.target.value);
         }}
+        required
       />
       <button className="send-button">
         <AiOutlineSend style={{ fontSize: "150%", color: "#EAEAEA" }} />

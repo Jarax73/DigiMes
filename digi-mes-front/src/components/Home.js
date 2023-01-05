@@ -6,6 +6,7 @@ import WelcomeMessage from "./WelcomeMessage";
 import Friends from "./Friends";
 import ProfilPicture from "./ProfilePicture";
 import { AppContext } from "../context/AppContext";
+// import Discuss from "./Discuss";
 
 export default function Home() {
   const [shown, setShown] = useState(false);
@@ -17,29 +18,24 @@ export default function Home() {
     socket,
     message,
     messageLoad,
+    setMessageLoad,
     setMessage,
-    connected,
     messageReceived,
     setMessageReceived,
     setConnected,
-    setOneUser,
   } = useContext(AppContext);
 
+  const messages = messageLoad?.map(
+    (message) =>
+      (message?.sender === oneUser._id || message?.to === oneUser._id) &&
+      message
+  );
   useEffect(() => {
-    console.log(messageLoad);
-    messageLoad.map((message) => {
-      setConnected((prevState) =>
-        prevState.map((connected) => {
-          return connected._id === message.sender ||
-            connected._id === message.to
-            ? {
-                ...connected,
-                messages: [...connected.messages, message],
-              }
-            : connected;
-        })
-      );
-    });
+    setConnected((prevState) =>
+      prevState.map((user) => {
+        return { ...user, messages: messages };
+      })
+    );
   }, []);
 
   const sendMessage = (e) => {
@@ -58,14 +54,10 @@ export default function Home() {
       sender: user._id,
     };
     socket.current.emit("private_message", messageData);
+    setMessageLoad([...messageLoad, messageData]);
     setConnected((prevState) =>
-      prevState.map((connected) => {
-        return connected._id === messageData.to
-          ? {
-              ...connected,
-              messages: [...connected.messages, messageData],
-            }
-          : connected;
+      prevState.map((user) => {
+        return { ...user, messages: messages };
       })
     );
     setMessage("");
@@ -80,18 +72,12 @@ export default function Home() {
   }, []);
 
   useEffect(() => {
-    if (!messageReceived) return;
+    setMessageLoad([...messageLoad, messageReceived]);
     setConnected((prevState) =>
-      prevState.map((connected) => {
-        return connected._id === messageReceived.sender
-          ? {
-              ...connected,
-              messages: [...connected.messages, messageReceived],
-            }
-          : connected;
+      prevState.map((user) => {
+        return { ...user, messages: messages };
       })
     );
-    setOneUser((prevState) => prevState);
   }, [messageReceived]);
 
   // const deleteMessage = (id) => {
@@ -99,19 +85,12 @@ export default function Home() {
   //     res.data;
   //   });
   // };
-  const [selectUser, setSelectUser] = useState(null);
-
-  useEffect(() => {
-    if (!oneUser) return;
-    if (!connected) return;
-    setSelectUser(connected.find((user) => user._id === oneUser._id));
-  }, [oneUser, connected]);
 
   return (
     <>
       <section className="users">
         <SearchUser />
-        <Friends setShown={setShown} />
+        <Friends setShown={setShown} messages={messages} />
       </section>
       <section className="discuss">
         {shown === false ? (
@@ -121,7 +100,7 @@ export default function Home() {
             <ProfilPicture />
           )
         ) : userInfo === false ? (
-          <Discussion sendMessage={sendMessage} selectUser={selectUser} />
+          <Discussion sendMessage={sendMessage} messages={messages} />
         ) : (
           <ProfilPicture />
         )}

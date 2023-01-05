@@ -7,17 +7,16 @@ import { AppContext } from "../context/AppContext";
 
 export default function UserConversation({ setShown }) {
   const {
+    logout,
     ProfilePicture,
     token,
     friends,
     setFriend,
-    connected,
     setOneUser,
     setId,
     setUserInfo,
   } = useContext(AppContext);
-  console.log(friends);
-  console.log(connected);
+
   useEffect(() => {
     if (!token) return;
     axios
@@ -28,7 +27,12 @@ export default function UserConversation({ setShown }) {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((response) => setFriend(response.data));
+      .then((response) => {
+        setFriend(response.data);
+      })
+      .catch((error) => {
+        if (error.response.data === "Unauthorized") logout();
+      });
   }, []);
 
   return (

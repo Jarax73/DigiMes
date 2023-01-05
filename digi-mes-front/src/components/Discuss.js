@@ -25,16 +25,16 @@ export default function Discuss({ discuss, deleteMessage, message }) {
   );
 
   return (
-    <div className={message.sender === user._id ? "me" : "other"}>
+    <div className={message?.sender === user._id ? "me" : "other"}>
       {changeAndModify}
       <div
         className="discuss-border"
         onClick={handleMessage}
-        id={message.sender === user._id ? "me" : "other"}
+        id={message?.sender === user._id ? "me" : "other"}
       >
-        <p style={{ alignSelf: "flex-end" }}>{message.discussion}</p>
+        <p style={{ alignSelf: "flex-end" }}>{message?.discussion}</p>
       </div>
-      <p style={{ marginTop: "-2%", fontSize: "14px" }}>{message.time}</p>
+      <p style={{ marginTop: "-0.8%", fontSize: "14px" }}>{message?.time}</p>
     </div>
   );
 }
