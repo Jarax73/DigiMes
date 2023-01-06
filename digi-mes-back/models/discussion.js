@@ -10,6 +10,7 @@ const discussionSchema = mongoose.Schema(
         discussion: { type: String },
         to: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         sender: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
+        isImage: { type: Boolean, default: false },
     },
     {
         timestamps: true,
