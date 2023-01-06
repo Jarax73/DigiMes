@@ -8,9 +8,8 @@ import { css } from "@emotion/css";
 import ScrollToBottom from "react-scroll-to-bottom";
 import { AppContext } from "../context/AppContext";
 
-export default function Discussion({ sendMessage, messages /*selectUser*/ }) {
-  const { ProfilePicture, oneUser /*messageLoad user*/ } =
-    useContext(AppContext);
+export default function Discussion({ sendMessage, messages }) {
+  const { ProfilePicture, oneUser } = useContext(AppContext);
 
   const ROOT_CSS = css({
     height: 600,
@@ -34,18 +33,6 @@ export default function Discussion({ sendMessage, messages /*selectUser*/ }) {
       </header>
       <hr style={{ width: "90%" }} />
       <ScrollToBottom className="to-discuss" {...ROOT_CSS}>
-        {/* {selectUser &&
-          selectUser.messages.map((message, index) => (
-            <Discuss key={index} message={message} />
-          ))} */}
-        {/* {messageLoad &&
-          messageLoad?.map(
-            (message, index) =>
-              (message.sender === oneUser._id ||
-                message.to === oneUser._id) && (
-                <Discuss key={index} message={message} />
-              )
-          )} */}
         {messages &&
           messages.map((message, index) =>
             message === false ? null : <Discuss key={index} message={message} />

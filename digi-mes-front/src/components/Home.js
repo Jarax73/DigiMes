@@ -48,6 +48,7 @@ export default function Home() {
         ":" +
         new Date(Date.now()).getMinutes(),
       discussion: message,
+      isImage: false,
       to: id,
       socketTo: oneUser.socket,
       socket: socket.current.id,

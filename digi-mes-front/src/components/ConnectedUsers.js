@@ -6,14 +6,16 @@ export default function UserConversation({ setShown /*messages*/ }) {
   const { ProfilePicture, setOneUser, setId, user, connected, setUserInfo } =
     useContext(AppContext);
 
+  console.log(connected);
+
   return (
     <div className="users-discuss">
       <h2 style={{ margin: "3%" }}>Connected</h2>
       <hr />
-      {connected?.length === 0 ? (
+      {connected.length === 0 ? (
         <div style={{ margin: "5% 5%" }}>*** No users connected</div>
       ) : (
-        connected?.map((friend) => {
+        connected.map((friend) => {
           if (friend._id !== user._id) {
             return (
               <div
@@ -43,7 +45,6 @@ export default function UserConversation({ setShown /*messages*/ }) {
                       {friend.firstName} {friend.lastName}{" "}
                     </h3>
                     <p>
-                      {/* {messages[messages.length - 1]?.discussion} */}
                       {/* {friend.messages[friend.messages.length - 1]?.discussion} */}
                     </p>
                   </div>
