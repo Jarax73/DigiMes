@@ -22,21 +22,43 @@ export default function Home() {
     setMessage,
     messageReceived,
     setMessageReceived,
+    connected,
     setConnected,
   } = useContext(AppContext);
 
-  const messages = messageLoad?.map(
-    (message) =>
-      (message?.sender === oneUser._id || message?.to === oneUser._id) &&
-      message
+  const messages = messageLoad?.map((message) =>
+    (message?.sender === oneUser._id && message?.to === user._id) ||
+    (message?.sender === user._id && message?.to === oneUser._id)
+      ? message
+      : null
   );
+
   useEffect(() => {
-    setConnected((prevState) =>
-      prevState.map((user) => {
-        return { ...user, messages: messages };
-      })
-    );
+    // console.log(messages);
+    messages.map((message) => {
+      setConnected((prevState) =>
+        prevState.map((connected) => {
+          return (message?.to === connected._id &&
+            message?.sender === connected._id) ||
+            (message?.to === user._id && message?.sender === user._id)
+            ? { ...connected, messages: [...connected.messages, message] }
+            : connected;
+        })
+      );
+    });
   }, []);
+
+  console.log(connected);
+
+  console.log(messages);
+
+  // useEffect(() => {
+  //   setConnected((prevState) =>
+  //     prevState.map((user) => {
+  //       return { ...user, messages: [...user.messages, messages] };
+  //     })
+  //   );
+  // }, []);
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -56,11 +78,11 @@ export default function Home() {
     };
     socket.current.emit("private_message", messageData);
     setMessageLoad([...messageLoad, messageData]);
-    setConnected((prevState) =>
-      prevState.map((user) => {
-        return { ...user, messages: messages };
-      })
-    );
+    // setConnected((prevState) =>
+    //   prevState.map((user) => {
+    //     return { ...user, messages: [...user.messages, messages] };
+    //   })
+    // );
     setMessage("");
   };
 
@@ -74,11 +96,6 @@ export default function Home() {
 
   useEffect(() => {
     setMessageLoad([...messageLoad, messageReceived]);
-    setConnected((prevState) =>
-      prevState.map((user) => {
-        return { ...user, messages: messages };
-      })
-    );
   }, [messageReceived]);
 
   // const deleteMessage = (id) => {

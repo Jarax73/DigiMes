@@ -35,7 +35,9 @@ export default function Discussion({ sendMessage, messages }) {
       <ScrollToBottom className="to-discuss" {...ROOT_CSS}>
         {messages &&
           messages.map((message, index) =>
-            message === false ? null : <Discuss key={index} message={message} />
+            message === false || message === null ? null : (
+              <Discuss key={index} message={message} />
+            )
           )}
       </ScrollToBottom>
       <div className="send-message">

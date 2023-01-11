@@ -9,6 +9,7 @@ export const AppContext = createContext();
 
 export default function AppProvider({ children }) {
   const socket = useRef(io(apiUrl));
+
   const [user, setUser] = useState([]);
   const [discussion, setDiscussion] = useState([]);
   const [token, setToken] = useState("");

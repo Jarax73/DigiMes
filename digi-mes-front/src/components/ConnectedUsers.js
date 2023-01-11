@@ -12,7 +12,7 @@ export default function UserConversation({ setShown /*messages*/ }) {
     <div className="users-discuss">
       <h2 style={{ margin: "3%" }}>Connected</h2>
       <hr />
-      {connected.length === 0 ? (
+      {!connected ? (
         <div style={{ margin: "5% 5%" }}>*** No users connected</div>
       ) : (
         connected.map((friend) => {

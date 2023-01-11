@@ -14,6 +14,7 @@ export default function UserConversation({ setShown }) {
     setFriend,
     setOneUser,
     setId,
+    user,
     setUserInfo,
   } = useContext(AppContext);
 
@@ -41,36 +42,40 @@ export default function UserConversation({ setShown }) {
         <div style={{ margin: "5% 5%" }}>loading...</div>
       ) : (
         friends.map((friend) => {
-          return (
-            <div
-              style={{ textDecoration: "none" }}
-              key={friend._id}
-              onClick={() => {
-                setShown(true);
-                setId(friend._id);
-                setOneUser(friend);
-                setUserInfo(false);
-              }}
-            >
-              <div className="conversation">
-                <div className="conversation-img">
-                  <img
-                    className="user-avatar"
-                    src={
-                      friend.imageUrl === "" ? ProfilePicture : friend.imageUrl
-                    }
-                    alt="user"
-                  />
-                </div>
-                <div className="info-conversation">
-                  <h3>
-                    {friend.firstName} {friend.lastName}
-                  </h3>
-                  <p>Message</p>
+          if (friend._id !== user._id) {
+            return (
+              <div
+                style={{ textDecoration: "none" }}
+                key={friend._id}
+                onClick={() => {
+                  setShown(true);
+                  setId(friend._id);
+                  setOneUser(friend);
+                  setUserInfo(false);
+                }}
+              >
+                <div className="conversation">
+                  <div className="conversation-img">
+                    <img
+                      className="user-avatar"
+                      src={
+                        friend.imageUrl === ""
+                          ? ProfilePicture
+                          : friend.imageUrl
+                      }
+                      alt="user"
+                    />
+                  </div>
+                  <div className="info-conversation">
+                    <h3>
+                      {friend.firstName} {friend.lastName}
+                    </h3>
+                    <p>Message</p>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
+            );
+          }
         })
       )}
     </div>
