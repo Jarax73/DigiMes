@@ -22,7 +22,7 @@ export default function Home() {
     setMessage,
     messageReceived,
     setMessageReceived,
-    connected,
+    // connected,
     setConnected,
   } = useContext(AppContext);
 
@@ -48,9 +48,8 @@ export default function Home() {
     });
   }, []);
 
-  console.log(connected);
-
-  console.log(messages);
+  console.log(message);
+  console.log(message.length);
 
   // useEffect(() => {
   //   setConnected((prevState) =>
@@ -62,28 +61,33 @@ export default function Home() {
 
   const sendMessage = (e) => {
     e.preventDefault();
-    const messageData = {
-      time:
-        new Date(Date.now()).toDateString() +
-        " " +
-        new Date(Date.now()).getHours() +
-        ":" +
-        new Date(Date.now()).getMinutes(),
-      discussion: message,
-      isImage: false,
-      to: id,
-      socketTo: oneUser.socket,
-      socket: socket.current.id,
-      sender: user._id,
-    };
-    socket.current.emit("private_message", messageData);
-    setMessageLoad([...messageLoad, messageData]);
-    // setConnected((prevState) =>
-    //   prevState.map((user) => {
-    //     return { ...user, messages: [...user.messages, messages] };
-    //   })
-    // );
-    setMessage("");
+    if (message.trim()) {
+      const messageData = {
+        time:
+          new Date(Date.now()).toDateString() +
+          " " +
+          new Date(Date.now()).getHours() +
+          ":" +
+          new Date(Date.now()).getMinutes(),
+        discussion: message,
+        isImage: false,
+        to: id,
+        socketTo: oneUser.socket,
+        socket: socket.current.id,
+        sender: user._id,
+      };
+
+      socket.current.emit("private_message", messageData);
+      setMessageLoad([...messageLoad, messageData]);
+      // setConnected((prevState) =>
+      //   prevState.map((user) => {
+      //     return { ...user, messages: [...user.messages, messages] };
+      //   })
+      // );
+      setMessage("");
+    } else {
+      alert("Le champ est vide");
+    }
   };
 
   useEffect(() => {

@@ -200,17 +200,35 @@ code {
     width: fit-content;
     max-width: 50%;
     padding: 0 5%;
-    margin: 10px 0;
+    
     border-radius: 15px;
+}
+#me-triangle{
+    width: 0;
+    height: 0;
+    border: 0 solid transparent;
+    border-right-width: 25px;
+    border-bottom: 25px solid #1966FF;
+    margin-top: -35px;
+}
+#other-triangle{
+    width: 0;
+    height: 0;
+    border: 0 solid transparent;
+    border-left-width: 25px;
+    border-bottom: 25px solid #eaeaea;
+    margin-top: -35px;
 }
 #me{
     color: #fff;
     background-color: #1966FF;
     align-self: flex-end;
+    margin: 10px 10px 10px 0;
     /* float: right; */
 }
 #other{
     background-color: #eaeaea;
+    margin: 10px 0 10px 10px;
 }
 .me{
     display: flex;

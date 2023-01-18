@@ -7,6 +7,9 @@ export default function Discuss({ discuss, deleteMessage, message }) {
   const [isShown, setIsShown] = useState(false);
   const { user } = useContext(AppContext);
 
+  // console.log(message?.discussion.charCodeAt(0));
+  // console.log(message?.discussion);
+
   const handleMessage = () => {
     setIsShown((current) => !current);
   };
@@ -34,7 +37,10 @@ export default function Discuss({ discuss, deleteMessage, message }) {
       >
         <p style={{ alignSelf: "flex-end" }}>{message?.discussion}</p>
       </div>
-      <p style={{ marginTop: "-0.8%", fontSize: "14px" }}>{message?.time}</p>
+      <div
+        id={message?.sender === user._id ? "me-triangle" : "other-triangle"}
+      ></div>
+      <p style={{ marginTop: "2%", fontSize: "14px" }}>{message?.time}</p>
     </div>
   );
 }

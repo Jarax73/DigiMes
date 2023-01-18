@@ -6,8 +6,6 @@ export default function UserConversation({ setShown /*messages*/ }) {
   const { ProfilePicture, setOneUser, setId, user, connected, setUserInfo } =
     useContext(AppContext);
 
-  console.log(connected);
-
   return (
     <div className="users-discuss">
       <h2 style={{ margin: "3%" }}>Connected</h2>

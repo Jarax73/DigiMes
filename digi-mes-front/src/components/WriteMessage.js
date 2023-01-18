@@ -6,6 +6,10 @@ import { AppContext } from "../context/AppContext";
 export default function WriteMessage({ sendMessage }) {
   const { setMessage, message } = useContext(AppContext);
 
+  // const trim = (message) => {
+  //   // if (message.match(/(\s)/)) return message.replace(/(\s*)/g, "");
+  // };
+
   return (
     <form className="writing-container" onSubmit={sendMessage}>
       <input
@@ -16,7 +20,7 @@ export default function WriteMessage({ sendMessage }) {
         onChange={(e) => {
           setMessage(e.target.value);
         }}
-        required
+        autoFocus
       />
       <button className="send-button">
         <AiOutlineSend style={{ fontSize: "150%", color: "#EAEAEA" }} />
