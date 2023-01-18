@@ -62,10 +62,10 @@ exports.login = (request, response) => {
         }
 
         const valid = await bcrypt.compare(
-            user.password,
-            request.body.password
+            request.body.password,
+            user.password
         );
-        if (valid) {
+        if (!valid) {
             return response.status(401).send({
                 success: false,
                 message: "Incorrect password",
@@ -77,7 +77,7 @@ exports.login = (request, response) => {
             id: user._id,
         };
 
-        const token = jwt.sign(payload, "Random string", { expiresIn: "1d" });
+        const token = jwt.sign(payload, "Random string", { expiresIn: "30d" });
 
         return response.status(200).json({
             success: true,
