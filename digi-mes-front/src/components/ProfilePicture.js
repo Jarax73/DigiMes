@@ -57,7 +57,7 @@ export default function ProfilPicture() {
         type="file"
         onChange={(e) => setProfilePicture(e.target.files[0])}
       />
-      <button onClick={(e) => uploadImage(e)}>Save</button>
+      <button onClick={() => uploadImage()}>Save</button>
     </div>
   );
 }

@@ -48,9 +48,6 @@ export default function Home() {
     });
   }, []);
 
-  console.log(message);
-  console.log(message.length);
-
   // useEffect(() => {
   //   setConnected((prevState) =>
   //     prevState.map((user) => {
